@@ -209,6 +209,11 @@
         "mimeType": "image/x-mkcd-f4",
         "tilemapTile": true
     },
+    "tile40": {
+        "data": "hwQQABAAAAB3d3d3d3d3d3d3d3d3d3d3d3d3J3J3d3d3d3cnYnh3d3d3d0d0hnd3d3d3d3dnZnd3d3d3VWd4d3d3d3dVhnd3d3d3d0R3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dw==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true
+    },
     "level": {
         "id": "level",
         "mimeType": "application/mkcd-tilemap",

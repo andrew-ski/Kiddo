@@ -35,7 +35,7 @@ function rewardHUD () {
 sprites.onOverlap(SpriteKind.bear, SpriteKind.Player, function (sprite, otherSprite) {
     healthPercent += -10
     BearSprite.say("CHOMP", 500)
-    pause(1000)
+    pause(500)
 })
 // 0 - up
 // 
@@ -77,7 +77,7 @@ sprites.onOverlap(SpriteKind.Sword, SpriteKind.bear, function (sprite, otherSpri
             `, SpriteKind.Food)
         bearSteak.setPosition(Kiddo.x + 0, Kiddo.y + 0)
     }
-    pause(1000)
+    pause(750)
 })
 function spawnPocky () {
     Pocky = sprites.create(img`
@@ -209,7 +209,7 @@ function initHUDtitle (hudSprite: Sprite) {
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile42, function (sprite, location) {
     game.splash("You found a speaker!")
     game.splash("You found a speaker?")
-    game.splash("You go to sleep and dream about speakers")
+    game.splash("You go to sleep ", "and dream about speakers")
     hasSpeaker += 1
     Level2()
     rewardHUD()
@@ -966,6 +966,8 @@ function spawnRandGrass () {
             tiles.setTileAt(value2, myTiles.tile5)
         } else if (randint(1, 6) == 1) {
             tiles.setTileAt(value2, myTiles.tile6)
+        } else if (randint(1, 6) == 1) {
+            tiles.setTileAt(value2, myTiles.tile40)
         } else {
             tiles.setTileAt(value2, myTiles.tile8)
         }
@@ -1071,8 +1073,8 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 scene.onHitWall(SpriteKind.squirrel, function (sprite, location) {
     Squirrel.destroy()
-    Berries.destroy()
     squirrelExit.destroy()
+    Berries.destroy()
     squirrelIs = 0
     squirrelExitIs = 0
 })
@@ -1147,9 +1149,9 @@ scene.onHitWall(SpriteKind.Sword, function (sprite, location) {
                 tiles.setTileAt(location, myTiles.tile7)
                 berriesIs += 1
                 if (squirrelIs == 0 && bearIs == 0) {
-                    if (randint(0, 2) == 0) {
+                    if (randint(0, 1) == 0) {
                         spawnSquirrel()
-                    } else if (randint(0, 4) == 0) {
+                    } else if (randint(0, 3) == 0) {
                         spawnBear()
                     }
                 }
@@ -1201,7 +1203,7 @@ function spawnBear () {
         `, SpriteKind.bear)
     BearSprite.setPosition(Kiddo.x + 50, Kiddo.y + 50)
     BearSprite.follow(Kiddo, 55)
-    BearHealth = 3
+    BearHealth = 4
     bearIs = 1
 }
 function bearAnimate () {
@@ -1413,7 +1415,7 @@ function destroySprites () {
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.squirrel, function (sprite, otherSprite) {
     healthPercent += -5
-    pause(1000)
+    pause(750)
 })
 sprites.onDestroyed(SpriteKind.Timer, function (sprite) {
     animation.stopAnimation(animation.AnimationTypes.All, Kiddo)
