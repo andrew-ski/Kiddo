@@ -5,6 +5,7 @@ namespace SpriteKind {
     export const bear = SpriteKind.create()
     export const squirrel = SpriteKind.create()
     export const exit = SpriteKind.create()
+    export const fire = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.bear, SpriteKind.Player, function (sprite, otherSprite) {
     healthPercent += -10
@@ -75,6 +76,105 @@ function spawnPocky () {
     pockyIs = 1
     for (let value of tiles.getTilesByType(myTiles.tile3)) {
         tiles.placeOnTile(Pocky, value)
+    }
+}
+function spawnFire () {
+    firePit = sprites.create(img`
+        . . . . . . . . f . . . . . . . 
+        . . . . . . . f 2 f . . . . . . 
+        . . . . . . f 2 4 2 f . . . . . 
+        . . . . . f 2 2 4 2 2 f . . . . 
+        . . . . f 2 2 4 4 4 2 2 f . . . 
+        . . . f 2 2 4 4 5 4 4 2 2 f . . 
+        . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
+        . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
+        . . . f 2 2 4 4 4 4 4 2 2 f . . 
+        . f f . f 2 2 2 2 2 2 2 f . f . 
+        f e e f f f f 2 2 2 f f f f e f 
+        . f f e e e e f f f e e e e f . 
+        f . . f f f f e e e f f f f . . 
+        . f f e e e e f f f e e e e f . 
+        f e e f f f f . . . f f f f e f 
+        . f f . . . . . . . . . . . f . 
+        `, SpriteKind.fire)
+    animation.runImageAnimation(
+    firePit,
+    [img`
+        . . . . . . . . f . . . . . . . 
+        . . . . . . . f 2 f . . . . . . 
+        . . . . . . f 2 2 2 f . . . . . 
+        . . . . . f 2 2 4 2 2 f . . . . 
+        . . . . f 2 2 4 4 4 2 2 f . . . 
+        . . . f 2 2 4 4 4 4 4 2 2 f . . 
+        . . f 2 2 4 4 4 5 4 4 4 2 2 f . 
+        . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
+        . . . f 2 2 4 5 1 5 4 2 2 f . . 
+        . f f . f 2 2 2 2 2 2 2 f . f . 
+        f e e f f f f 2 2 2 f f f f e f 
+        . f f e e e e f f f e e e e f . 
+        f . . f f f f e e e f f f f . . 
+        . f f e e e e f f f e e e e f . 
+        f e e f f f f . . . f f f f e f 
+        . f f . . . . . . . . . . . f . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . f . . . . . . . 
+        . . . . . . . f 2 f . . . . . . 
+        . . . . . . f 2 2 2 f . . . . . 
+        . . . . . f 2 2 4 2 2 f . . . . 
+        . . . . f 2 2 4 4 4 2 2 f . . . 
+        . . . f 2 2 4 4 4 4 4 2 2 f . . 
+        . . f 2 2 2 4 4 5 4 4 2 2 2 f . 
+        . . . f 2 2 4 5 5 5 4 2 2 f . . 
+        . f f . f 2 2 2 2 2 2 2 f . f . 
+        f e e f f f f 2 2 2 f f f f e f 
+        . f f e e e e f f f e e e e f . 
+        f . . f f f f e e e f f f f . . 
+        . f f e e e e f f f e e e e f . 
+        f e e f f f f . . . f f f f e f 
+        . f f . . . . . . . . . . . f . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . f . . . . . . . 
+        . . . . . . . f 2 f . . . . . . 
+        . . . . . . f 2 2 2 f . . . . . 
+        . . . . . f 2 2 2 2 2 f . . . . 
+        . . . . f 2 2 2 4 2 2 2 f . . . 
+        . . . f 2 2 2 4 5 4 2 2 2 f . . 
+        . . . f 2 2 4 5 5 5 4 2 2 f . . 
+        . f f . f 2 2 2 2 2 2 2 f . f . 
+        f e e f f f f 2 2 2 f f f f e f 
+        . f f e e e e f f f e e e e f . 
+        f . . f f f f e e e f f f f . . 
+        . f f e e e e f f f e e e e f . 
+        f e e f f f f . . . f f f f e f 
+        . f f . . . . . . . . . . . f . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . f . . . . . . . 
+        . . . . . . . f 2 f . . . . . . 
+        . . . . . . f 2 2 2 f . . . . . 
+        . . . . . f 2 2 4 2 2 f . . . . 
+        . . . . f 2 2 4 4 4 2 2 f . . . 
+        . . . f 2 2 4 4 4 4 4 2 2 f . . 
+        . . f 2 2 2 4 4 5 4 4 2 2 2 f . 
+        . . . f 2 2 4 5 5 5 4 2 2 f . . 
+        . f f . f 2 2 2 2 2 2 2 f . f . 
+        f e e f f f f 2 2 2 f f f f e f 
+        . f f e e e e f f f e e e e f . 
+        f . . f f f f e e e f f f f . . 
+        . f f e e e e f f f e e e e f . 
+        f e e f f f f . . . f f f f e f 
+        . f f . . . . . . . . . . . f . 
+        `],
+    200,
+    true
+    )
+    firePitIs = 1
+    for (let value of tiles.getTilesByType(myTiles.tile43)) {
+        tiles.placeOnTile(firePit, value)
+        tiles.setTileAt(value, myTiles.transparency16)
     }
 }
 function initHUDtitle (hudSprite: Sprite) {
@@ -490,6 +590,7 @@ function intro () {
     game.splash("You're taking a hike")
     kiddoIntro.destroy()
     daddoIntro.destroy()
+    Level1()
 }
 function walk () {
     if (lastDirection == 0) {
@@ -857,6 +958,7 @@ function spawnSquirrel () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.exit)
+    squirrelExitIs = 1
     squirrelExit.setPosition(Kiddo.x + 80, Kiddo.y + 32)
     squirrelExit.z = 1
     Squirrel = sprites.create(img`
@@ -879,43 +981,44 @@ function spawnSquirrel () {
 function Level11 () {
     destroySprites()
     scene.setBackgroundColor(7)
-    tiles.setTilemap(tiles.createTilemap(hex`20002000030303030303030303030303030303050701010101010101010101010101010107010101010101010101010101010104010101010101010101010101010101010101080303030303030303030303030f03030303030303030303030305010101010104010e01010e01010e01010e01010e01010e01010e01010e0101040101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0104010101010104010a01010a01010a01010a01010a01010a01010a01010a010104010101010104010e01010e01010e01010e01010e01010e01010e01010e0107040101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0104010101010104010a01010a01010a01010a01010a01010a01010a01010a010104010101010104010e01010e01010e01010e01010e01010e01010e01010e0101040101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0104010101010104010a01010a01010a01010a01010a01010a01010a01010a0101040101010101060303030303030305010e0101010101070101010101010101010401010101010107010101010101040b0d0c0101010101010101010701010101040101010101010101010101010104010a010101010101010101010101010101040101010101010101010101010104010e0102030303030303030303030303030901010101010101010101010101040b0d0c010e01010e01010e01010e01010e01010e010101010101010107010104010a010b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0101010101010101010104010101010a01010a01010a01010a01010a01010a010107010101010101010104010e01010e01010e01010e01010e01010e0101010101010101010101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0101010101010803030303030309010a01010a01010a01010a01010a01010a0101010101010104010e01010e01010e01010e01010e01010e0101010101010101010101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0101010101010101010101010104010a01010a01010a01010a01010a01010a0101010e01010e01010e0107010104010e01010e01010e01010e01010e01010e01010b0d0c0b0d0c0b0d0c010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c01010a01010a01010a0101010104010a01010a01010a01010a01010a01010a0101010e01010e01010e0101070104010101010101010101010101010101010101010b0d0c0b0d0c0b0d0c0101010401010101010101010101010101010101010101010a01010a01010a0101010106030303030303030303030303030303030303030303030303030303030101010101010101010101010101010101010101010101010101010101010101`, img`
+    tiles.setTilemap(tiles.createTilemap(hex`20002000030303030303030303030303030303050701010101010101010101010101010107010101010101010101010101010104010101010101010101010101010101010101080303030303030303030303030b030303030303030303030303050101010101040c141414141414141414141414141414141414141414141201040101010101040d131313131313131313131313131313131313131313131101040101010101040d131313131313131313131313131313131313131313131101040101010101040d131313131313131313131313131313131313131313131107040101010101040d131313131313131313131313131313131313131313131101040101010101040d131313131313131313131313131313131313131313131101040101010101040d131313131313131313131313131313131313131313131101040101010101040e0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f100104010101010104010a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a01010401010101010603030303030303050c141201010101070101010101010101010401010101010107010101010101040d131101010101010101010107010101010401010101010101010101010101040d131101010101010101010101010101010401010101010101010101010101040d131102030303030303030303030303030901010101010101010101010101040d131514141414141414141414141414141414141201010101010101070101040d131313131313131313131313131313131313131101010101010101010101040d13131313131313131313131313131313170f0f1001070101010101010101040d13131313131313131313131313131313110a0a0101010101010101010101040d131313131313131313131313131313131101180101010108030303030303090d131313131313131313170f0f0f0f0f0f10010119010101040c14141414141416131313131313131313110a0a0a0a0a0a01010101010101040d131313131313131313131313131313131108030303030303030303010101040d1313131313131313131313131313131311040c1414141414141412070101040d1313131313131313131313131313131311040d1313131313131311010101040e0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f10040d131313131313131101010104010a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a01040d131313131313131101070104010101010101010101010101010101010101040e0f0f0f0f0f0f0f100101010401010101010101010101010101010101010104010a0a0a0a0a0a0a0101010106030303030303030303030303030303030303090101010101010101010101010101010101010101010101010101010101010101010101010101010101`, img`
         ................2...............
         2...............................
         ................................
-        ................................
-        ...222222222222222222222222.....
-        ...2......................2.....
-        ...2......................22....
         ...222222222222222222222222.....
         ...2......................2.....
         ...2......................2.....
-        ...222222222222222222222222.....
-        ...2.......222............2.....
-        ...........2.2....2.............
-        ...2.......222.........2........
-        ...........222..................
+        ...2......................2.....
+        ...2......................2.....
+        ...2......................2.....
+        ...2......................2.....
+        ...2......................2.....
+        ....2222222222222222222222......
+        ...........222....2.............
+        ...2.......2.2.........2........
         ...........2.2..................
-        ...........222222222222222222222
-        .......2...222222222222222222222
-        ...........2.222.22.22.22.22.222
-        .2.........222222222222222222...
-        ...........222222222222222222...
-        ...........22222.22.22.22.222...
-        ....222222222222222222..........
-        ....222222222222222222..........
-        ....22.22222.22.22.222.222222222
-        2...222222222222222222.222222222
-        ....222222222222222222.22.22.222
-        ....22.22222.22222.222.222222222
-        .2.....................222222222
-        .......................222222222
+        ...........2.2..................
+        ...........2.2222222222222222222
+        .......2...2....................
+        ...........2...................2
+        .2.........2................222.
+        ...........2................2...
+        ...........2..........2222222...
+        ....22222222.........2222222....
+        ....2................2..........
+        ....2................2.222222222
+        2...2................2.2.......2
+        ....2................2.2.......2
+        .....2222222222222222..2.......2
+        .2.....................2.......2
+        ........................2222222.
         ................................
         ................................
-        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile3,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile17,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile21,myTiles.tile22,myTiles.tile23,myTiles.tile24,myTiles.tile25], TileScale.Sixteen))
+        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile3,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile17,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile25,myTiles.tile28,myTiles.tile29,myTiles.tile30,myTiles.tile31,myTiles.tile32,myTiles.tile33,myTiles.tile34,myTiles.tile35,myTiles.tile36,myTiles.tile37,myTiles.tile38,myTiles.tile39,myTiles.tile42,myTiles.tile43], TileScale.Sixteen))
     spawnRandGrass()
     spawnKiddo()
     spawnPocky()
+    spawnFire()
     tiles.placeOnTile(Kiddo, tiles.getTileLocation(0, 0))
     berriesIs = 0
 }
@@ -928,7 +1031,33 @@ scene.onHitWall(SpriteKind.squirrel, function (sprite, location) {
     Berries.destroy()
     squirrelExit.destroy()
     squirrelIs = 0
+    squirrelExitIs = 0
 })
+function spawnSpeaker () {
+    speaker = sprites.create(img`
+        . . . . . . . . f . . . . . . . 
+        . . . . . . . f 2 f . . . . . . 
+        . . . . . . f 2 4 2 f . . . . . 
+        . . . . . f 2 2 4 2 2 f . . . . 
+        . . . . f 2 2 4 4 4 2 2 f . . . 
+        . . . f 2 2 4 4 5 4 4 2 2 f . . 
+        . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
+        . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
+        . . . f 2 2 4 4 4 4 4 2 2 f . . 
+        . f f . f 2 2 2 2 2 2 2 f . f . 
+        f e e f f f f 2 2 2 f f f f e f 
+        . f f e e e e f f f e e e e f . 
+        f . . f f f f e e e f f f f . . 
+        . f f e e e e f f f e e e e f . 
+        f e e f f f f . . . f f f f e f 
+        . f f . . . . . . . . . . . f . 
+        `, SpriteKind.fire)
+    firePitIs = 1
+    for (let value of tiles.getTilesByType(myTiles.tile43)) {
+        tiles.placeOnTile(firePit, value)
+        tiles.setTileAt(value, myTiles.transparency16)
+    }
+}
 scene.onHitWall(SpriteKind.Sword, function (sprite, location) {
     if (controller.A.isPressed()) {
         for (let value3 of [CollisionDirection.Left, CollisionDirection.Right, CollisionDirection.Top, CollisionDirection.Bottom]) {
@@ -1218,6 +1347,10 @@ function destroySprites () {
         squirrelIs = 0
         Squirrel.destroy()
     }
+    if (squirrelExitIs > 0) {
+        squirrelExitIs = 0
+        squirrelExit.destroy()
+    }
     if (bearIs > 0) {
         bearIs = 0
         BearSprite.destroy()
@@ -1225,6 +1358,10 @@ function destroySprites () {
     if (pockyIs > 0) {
         pockyIs = 0
         Pocky.destroy()
+    }
+    if (firePitIs > 0) {
+        firePitIs = 0
+        firePit.destroy()
     }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.squirrel, function (sprite, otherSprite) {
@@ -1397,7 +1534,9 @@ function squirrelAnimate () {
     }
 }
 let moving = false
+let speaker: Sprite = null
 let squirrelHealth = 0
+let squirrelExitIs = 0
 let squirrelIs = 0
 let squirrelExit: Sprite = null
 let Berries: Sprite = null
@@ -1412,6 +1551,8 @@ let meterWidth = 0
 let hungerTitle: Sprite = null
 let healthBar: Sprite = null
 let hungerBar: Sprite = null
+let firePitIs = 0
+let firePit: Sprite = null
 let pockyIs = 0
 let Pocky: Sprite = null
 let bearSteak: Sprite = null
@@ -1423,7 +1564,6 @@ let lastDirection = 0
 let BearSprite: Sprite = null
 let healthPercent = 0
 intro()
-Level1()
 spawnHUD()
 game.onUpdate(function () {
     moving = controller.left.isPressed() || (controller.right.isPressed() || (controller.up.isPressed() || controller.down.isPressed()))
