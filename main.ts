@@ -72,6 +72,7 @@ function spawnPocky () {
         2 f f 2 f f f 2 2 
         f f 2 2 f 2 f f 2 
         `, SpriteKind.Food)
+    pockyIs = 1
     for (let value of tiles.getTilesByType(myTiles.tile3)) {
         tiles.placeOnTile(Pocky, value)
     }
@@ -464,26 +465,31 @@ function intro () {
         . . e . . . 
         . . e e . . 
         `, SpriteKind.Player)
-    daddoIntro.setPosition(32, 32)
+    daddoIntro.setPosition(32, 16)
     kiddoIntro = sprites.create(img`
-        . e e e . . 
-        e e e e e . 
-        e e e d . . 
-        . e e e e . 
-        . . d e e . 
-        . . 6 . e . 
-        . . 6 . . . 
-        . . 6 6 d . 
-        . . e . . . 
-        . . 8 . . . 
-        . . 8 . . . 
-        . . 8 . . . 
-        . . e . . . 
-        . . e e . . 
+        . 6 6 6 6 6 . . . . . . . . . . 
+        e e e 6 6 6 6 . . . . . . . . . 
+        e f e 6 6 6 6 . . . . . . . . . 
+        . 6 e 6 6 6 6 . . . . . . . . . 
+        . d e 6 6 6 . . . . . . . . . . 
+        . d d e 6 6 . . . . . . . . . . 
+        . . e e 6 9 . . . . . . . . . . 
+        . . 6 6 9 9 9 . . . . . . . . . 
+        . . e 6 6 9 9 9 . . . . . . . . 
+        . . 8 6 6 9 9 9 . . . . . . . . 
+        . d 6 6 6 9 9 9 . . . . . . . . 
+        . . 8 6 . 9 9 . . . . . . . . . 
+        . . e 8 . . . . . . . . . . . . 
+        . . e 8 . . . . . . . . . . . . 
+        . . . 8 . . . . . . . . . . . . 
+        . . 3 3 . . . . . . . . . . . . 
         `, SpriteKind.Player)
-    kiddoIntro.setPosition(128 , 32)
-    game.splash("Kiddo", "You've had enough time on screens... ")
-    game.splash("Take a hike")
+    kiddoIntro.setPosition(128, 31)
+    game.splash("Kiddo", "Enough screen time...")
+    game.splash("Grab your backpack and trekking poles")
+    game.splash("You're taking a hike")
+    kiddoIntro.destroy()
+    daddoIntro.destroy()
 }
 function walk () {
     if (lastDirection == 0) {
@@ -802,6 +808,9 @@ sprites.onOverlap(SpriteKind.Sword, SpriteKind.squirrel, function (sprite, other
     Squirrel.destroy()
     squirrelIs = 0
 })
+scene.onOverlapTile(SpriteKind.Player, myTiles.tile26, function (sprite, location) {
+    Level11()
+})
 function spawnRandGrass () {
     for (let value2 of tiles.getTilesByType(myTiles.tile1)) {
         if (randint(1, 3) == 1) {
@@ -866,6 +875,49 @@ function spawnSquirrel () {
     Squirrel.follow(Berries, 70)
     squirrelHealth = 1
     squirrelIs = 1
+}
+function Level11 () {
+    destroySprites()
+    scene.setBackgroundColor(7)
+    tiles.setTilemap(tiles.createTilemap(hex`20002000030303030303030303030303030303050701010101010101010101010101010107010101010101010101010101010104010101010101010101010101010101010101080303030303030303030303030f03030303030303030303030305010101010104010e01010e01010e01010e01010e01010e01010e01010e0101040101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0104010101010104010a01010a01010a01010a01010a01010a01010a01010a010104010101010104010e01010e01010e01010e01010e01010e01010e01010e0107040101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0104010101010104010a01010a01010a01010a01010a01010a01010a01010a010104010101010104010e01010e01010e01010e01010e01010e01010e01010e0101040101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0104010101010104010a01010a01010a01010a01010a01010a01010a01010a0101040101010101060303030303030305010e0101010101070101010101010101010401010101010107010101010101040b0d0c0101010101010101010701010101040101010101010101010101010104010a010101010101010101010101010101040101010101010101010101010104010e0102030303030303030303030303030901010101010101010101010101040b0d0c010e01010e01010e01010e01010e01010e010101010101010107010104010a010b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0101010101010101010104010101010a01010a01010a01010a01010a01010a010107010101010101010104010e01010e01010e01010e01010e01010e0101010101010101010101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0101010101010803030303030309010a01010a01010a01010a01010a01010a0101010101010104010e01010e01010e01010e01010e01010e0101010101010101010101010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0101010101010101010101010104010a01010a01010a01010a01010a01010a0101010e01010e01010e0107010104010e01010e01010e01010e01010e01010e01010b0d0c0b0d0c0b0d0c010101040b0d0c0b0d0c0b0d0c0b0d0c0b0d0c0b0d0c01010a01010a01010a0101010104010a01010a01010a01010a01010a01010a0101010e01010e01010e0101070104010101010101010101010101010101010101010b0d0c0b0d0c0b0d0c0101010401010101010101010101010101010101010101010a01010a01010a0101010106030303030303030303030303030303030303030303030303030303030101010101010101010101010101010101010101010101010101010101010101`, img`
+        ................2...............
+        2...............................
+        ................................
+        ................................
+        ...222222222222222222222222.....
+        ...2......................2.....
+        ...2......................22....
+        ...222222222222222222222222.....
+        ...2......................2.....
+        ...2......................2.....
+        ...222222222222222222222222.....
+        ...2.......222............2.....
+        ...........2.2....2.............
+        ...2.......222.........2........
+        ...........222..................
+        ...........2.2..................
+        ...........222222222222222222222
+        .......2...222222222222222222222
+        ...........2.222.22.22.22.22.222
+        .2.........222222222222222222...
+        ...........222222222222222222...
+        ...........22222.22.22.22.222...
+        ....222222222222222222..........
+        ....222222222222222222..........
+        ....22.22222.22.22.222.222222222
+        2...222222222222222222.222222222
+        ....222222222222222222.22.22.222
+        ....22.22222.22222.222.222222222
+        .2.....................222222222
+        .......................222222222
+        ................................
+        ................................
+        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile3,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile17,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile21,myTiles.tile22,myTiles.tile23,myTiles.tile24,myTiles.tile25], TileScale.Sixteen))
+    spawnRandGrass()
+    spawnKiddo()
+    spawnPocky()
+    tiles.placeOnTile(Kiddo, tiles.getTileLocation(0, 0))
+    berriesIs = 0
 }
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     lastDirection = 2
@@ -1156,6 +1208,25 @@ sprites.onOverlap(SpriteKind.squirrel, SpriteKind.exit, function (sprite, otherS
     Squirrel.destroy()
     squirrelIs = 0
 })
+function destroySprites () {
+    Kiddo.destroy()
+    if (berriesIs > 0) {
+        berriesIs = 0
+        Berries.destroy()
+    }
+    if (squirrelIs > 0) {
+        squirrelIs = 0
+        Squirrel.destroy()
+    }
+    if (bearIs > 0) {
+        bearIs = 0
+        BearSprite.destroy()
+    }
+    if (pockyIs > 0) {
+        pockyIs = 0
+        Pocky.destroy()
+    }
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.squirrel, function (sprite, otherSprite) {
     healthPercent += -5
     pause(1000)
@@ -1333,14 +1404,15 @@ let Berries: Sprite = null
 let fillWidth = 0
 let berriesIs = 0
 let timer: Sprite = null
-let daddoIntro: Sprite = null
 let kiddoIntro: Sprite = null
+let daddoIntro: Sprite = null
 let Trekking_Pole: Sprite = null
 let hungerPercent = 0
 let meterWidth = 0
 let hungerTitle: Sprite = null
 let healthBar: Sprite = null
 let hungerBar: Sprite = null
+let pockyIs = 0
 let Pocky: Sprite = null
 let bearSteak: Sprite = null
 let bearIs = 0
