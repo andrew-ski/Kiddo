@@ -6,6 +6,31 @@ namespace SpriteKind {
     export const squirrel = SpriteKind.create()
     export const exit = SpriteKind.create()
     export const fire = SpriteKind.create()
+    export const reward = SpriteKind.create()
+}
+function rewardHUD () {
+    if (hasSpeaker == 1) {
+        rewardHUD1 = sprites.create(img`
+            b b b b b b b b b b b b b b b b b c 
+            b . . . f f f f f f f . . . . . b c 
+            b . . f c c c c c c c f . . 1 1 b c 
+            b . f f c f f f f f c f f . 1 1 b c 
+            b f c c f f f f f f f c c f 2 f b c 
+            b f c f f f c c c f f f c f 2 f b c 
+            b f c f f c f f f c f f c f 2 f b c 
+            b f c f f c f f f c f f c f 2 f b c 
+            b f c f f c f f f c f f c f 2 f b c 
+            b f c f f f c c c f f f c f 2 f b c 
+            b f c c f f f f f f f c c f 2 f b c 
+            b . f f c f f f f f c f f 2 2 f b c 
+            b . . f c c c c c c c f f f f f b c 
+            b . . . f f f f f f f . . . . . b c 
+            b b b b b b b b b b b b b b b b b c 
+            `, SpriteKind.HUD)
+        rewardHUD1.top = scene.screenHeight() - 16
+        initHUDtitle(rewardHUD1)
+        rewardHUD1.left = 45
+    }
 }
 sprites.onOverlap(SpriteKind.bear, SpriteKind.Player, function (sprite, otherSprite) {
     healthPercent += -10
@@ -171,7 +196,6 @@ function spawnFire () {
     200,
     true
     )
-    firePitIs = 1
     for (let value of tiles.getTilesByType(myTiles.tile43)) {
         tiles.placeOnTile(firePit, value)
         tiles.setTileAt(value, myTiles.transparency16)
@@ -182,6 +206,14 @@ function initHUDtitle (hudSprite: Sprite) {
     hudSprite.setFlag(SpriteFlag.RelativeToCamera, true)
     hudSprite.left = 0
 }
+scene.onOverlapTile(SpriteKind.Player, myTiles.tile42, function (sprite, location) {
+    game.splash("You found a speaker!")
+    game.splash("You found a speaker?")
+    game.splash("You go to sleep and dream about speakers")
+    hasSpeaker += 1
+    Level2()
+    rewardHUD()
+})
 function spawnHUD () {
     hungerBar = sprites.create(img`
         . . . . . . . . . . . . . . . . 
@@ -244,6 +276,16 @@ function spawnHUD () {
     initHUDtitle(hungerTitle)
     hungerPercent = 100
     healthPercent = 100
+}
+function Level2 () {
+    destroySprites()
+    scene.setBackgroundColor(7)
+    tiles.setTilemap(tilemap`level_0`)
+    spawnRandGrass()
+    spawnKiddo()
+    spawnPocky()
+    tiles.placeOnTile(Kiddo, tiles.getTileLocation(0, 1))
+    berriesIs = 0
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (lastDirection == 0) {
@@ -1019,6 +1061,7 @@ function Level11 () {
     spawnKiddo()
     spawnPocky()
     spawnFire()
+    spawnSpeaker()
     tiles.placeOnTile(Kiddo, tiles.getTileLocation(0, 0))
     berriesIs = 0
 }
@@ -1035,27 +1078,25 @@ scene.onHitWall(SpriteKind.squirrel, function (sprite, location) {
 })
 function spawnSpeaker () {
     speaker = sprites.create(img`
-        . . . . . . . . f . . . . . . . 
-        . . . . . . . f 2 f . . . . . . 
-        . . . . . . f 2 4 2 f . . . . . 
-        . . . . . f 2 2 4 2 2 f . . . . 
-        . . . . f 2 2 4 4 4 2 2 f . . . 
-        . . . f 2 2 4 4 5 4 4 2 2 f . . 
-        . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
-        . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
-        . . . f 2 2 4 4 4 4 4 2 2 f . . 
-        . f f . f 2 2 2 2 2 2 2 f . f . 
-        f e e f f f f 2 2 2 f f f f e f 
-        . f f e e e e f f f e e e e f . 
-        f . . f f f f e e e f f f f . . 
-        . f f e e e e f f f e e e e f . 
-        f e e f f f f . . . f f f f e f 
-        . f f . . . . . . . . . . . f . 
-        `, SpriteKind.fire)
-    firePitIs = 1
-    for (let value of tiles.getTilesByType(myTiles.tile43)) {
-        tiles.placeOnTile(firePit, value)
-        tiles.setTileAt(value, myTiles.transparency16)
+        ...................
+        ....fffffff.....11.
+        .fffcccccccfff.1111
+        .fccfffffffccf.1111
+        ffcfcccccccfcff.2f.
+        fcfccfffffccfcf.2f.
+        fcfcfffffffcfcf.2f.
+        fcfcfffffffcfcf.2f.
+        fcfcfffffffcfcf.2f.
+        fcfcfffffffcfcf.2f.
+        fcfcfffffffcfcf.2f.
+        fcfccfffffccfcf.2f.
+        ffcfcccccccfcff22f.
+        .fccfffffffccfffff.
+        .fffcccccccfff.....
+        ...fffffffff.......
+        `, SpriteKind.reward)
+    for (let value of tiles.getTilesByType(myTiles.tile42)) {
+        tiles.placeOnTile(speaker, value)
     }
 }
 scene.onHitWall(SpriteKind.Sword, function (sprite, location) {
@@ -1338,6 +1379,12 @@ sprites.onOverlap(SpriteKind.squirrel, SpriteKind.exit, function (sprite, otherS
     squirrelIs = 0
 })
 function destroySprites () {
+    for (let value of sprites.allOfKind(SpriteKind.exit)) {
+        value.destroy()
+    }
+    for (let value of sprites.allOfKind(SpriteKind.fire)) {
+        value.destroy()
+    }
     Kiddo.destroy()
     if (berriesIs > 0) {
         berriesIs = 0
@@ -1534,6 +1581,7 @@ function squirrelAnimate () {
     }
 }
 let moving = false
+let firePitIs = 0
 let speaker: Sprite = null
 let squirrelHealth = 0
 let squirrelExitIs = 0
@@ -1541,17 +1589,16 @@ let squirrelIs = 0
 let squirrelExit: Sprite = null
 let Berries: Sprite = null
 let fillWidth = 0
-let berriesIs = 0
 let timer: Sprite = null
 let kiddoIntro: Sprite = null
 let daddoIntro: Sprite = null
 let Trekking_Pole: Sprite = null
+let berriesIs = 0
 let hungerPercent = 0
 let meterWidth = 0
 let hungerTitle: Sprite = null
 let healthBar: Sprite = null
 let hungerBar: Sprite = null
-let firePitIs = 0
 let firePit: Sprite = null
 let pockyIs = 0
 let Pocky: Sprite = null
@@ -1563,6 +1610,8 @@ let Squirrel: Sprite = null
 let lastDirection = 0
 let BearSprite: Sprite = null
 let healthPercent = 0
+let rewardHUD1: Sprite = null
+let hasSpeaker = 0
 intro()
 spawnHUD()
 game.onUpdate(function () {
