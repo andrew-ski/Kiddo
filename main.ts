@@ -9,6 +9,7 @@ namespace SpriteKind {
     export const reward = SpriteKind.create()
     export const bush = SpriteKind.create()
     export const treatkind = SpriteKind.create()
+    export const Wolf = SpriteKind.create()
 }
 function rewardHUD () {
     if (hasReward > 0) {
@@ -74,7 +75,7 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile46, function (sprite, location) {
     game.splash("You go to sleep ", "and dream about batteries")
-    Level1()
+    level3()
 })
 function squirrelPath () {
     Squirrel.follow(Kiddo)
@@ -82,6 +83,8 @@ function squirrelPath () {
 sprites.onOverlap(SpriteKind.Sword, SpriteKind.bear, function (sprite, otherSprite) {
     if (BearHealth > 1) {
         BearHealth += -1
+        game.setDialogTextColor(15)
+        BearSprite.say("-1")
     } else if (BearHealth == 1) {
         BearSprite.destroy()
         bearIs = 0
@@ -105,32 +108,48 @@ sprites.onOverlap(SpriteKind.Sword, SpriteKind.bear, function (sprite, otherSpri
             `, SpriteKind.treatkind)
         bearSteak.setPosition(Kiddo.x + 0, Kiddo.y + 0)
     }
-    pause(750)
+    pause(500)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Wolf, function (sprite, otherSprite) {
+    healthPercent += -10
+    game.setDialogTextColor(2)
+    Kiddo.say("-10")
+    pause(100)
 })
 function spawnPocky () {
     Pocky = sprites.create(img`
-        f f f f f f f f f 
-        2 2 2 2 2 2 2 2 2 
-        2 2 2 2 2 2 2 2 2 
-        2 4 4 2 4 2 2 4 2 
-        2 4 4 2 4 2 2 4 2 
-        2 f f 2 f 2 2 f 2 
-        2 f 1 1 f 2 f f 2 
-        2 2 1 f 1 1 f f 2 
-        2 2 1 f f f 1 2 2 
-        2 2 1 f f 1 1 2 2 
-        2 2 1 1 1 f 2 2 2 
-        2 2 1 f f f 2 2 2 
-        2 2 1 f f f 2 2 2 
-        2 2 1 f f f f 2 2 
-        2 f f 2 f f f 2 2 
-        f f 2 2 f 2 f f 2 
+        f f f f f f f f f d 
+        2 2 2 2 2 2 2 2 2 d 
+        2 2 2 2 2 2 2 2 2 d 
+        2 4 2 2 4 2 2 4 2 d 
+        2 4 2 2 4 2 2 4 2 d 
+        2 f 2 2 f 2 2 f 2 d 
+        2 2 f 2 f 2 f 2 2 d 
+        2 2 f 2 f 2 f 2 2 d 
+        2 2 2 f f f 2 2 2 d 
+        2 2 2 2 f 2 2 2 2 d 
+        2 2 2 2 f 2 2 2 2 d 
+        2 2 2 f f f 2 2 2 d 
+        2 2 2 f f f 2 2 2 d 
+        2 2 f 2 f 2 f 2 2 d 
+        2 2 f 2 f 2 f 2 2 d 
+        2 f 2 2 f 2 2 f 2 d 
         `, SpriteKind.treatkind)
     pockyIs = 1
     for (let value of tiles.getTilesByType(myTiles.tile3)) {
         tiles.placeOnTile(Pocky, value)
     }
 }
+sprites.onOverlap(SpriteKind.Sword, SpriteKind.Wolf, function (sprite, otherSprite) {
+    if (WolfyHealth > 1) {
+        WolfyHealth += -1
+        game.setDialogTextColor(15)
+        Wolfy.say("-1")
+    } else {
+        Wolfy.destroy(effects.disintegrate, 500)
+    }
+    pause(200)
+})
 function spawnFire () {
     firePit = sprites.create(img`
         . . . . . . . . f . . . . . . . 
@@ -303,6 +322,7 @@ function spawnHUD () {
 }
 function Level2 () {
     Kiddo.destroy()
+    CurrentLevel = 2
     tiles.setTilemap(tilemap`level_1`)
     startLevel()
     spawnFire()
@@ -951,44 +971,78 @@ function createTimer (ms: number) {
     timer.lifespan = ms
 }
 function level3 () {
-    tiles.setTilemap(tiles.createTilemap(hex`28002000010703030303030303030303030303030303030303030303030303030303030303030303030303030104010101010101010101010101010101010101010101010101010101010101010101010101010101040101010101010101010101010101010101010101010101010101010101010101010101010101010401010101010101010101010101010101010101010101010101010101010101010101010101010104010101010101010101010101010101010101010101010101010101010101010101010101010101040101010101010101010101010101010101010101010101010101010101010101010101010101010401010101010101010101010101010101010101010101010101010101010101010101010101010104010101010101010101010101010101010101010101010101010101010101010101010101010101040101010101010101010101010101010101010101010101010101010101010101010101010101010401010101010101010101070303030303030305010101010101010101010101010101010101010104010101010101030303030301010101010101040101010101010101010101010101010101010101040101010101010101010101010101010101010401010101010101010101010101010101010101010401010101010101010101010101010101010104010101010101010101010101010101010101010104010101010101010101010101010101010101040101010101010101010101010303030303030501040101010101010101010101010101010101010401010101010101010101010101010101010104010401010101010101010101010101010101010104010101010101010101010101010101010101040104010101010101010101010101010101010101040101010101010101010101010101010101010401040101010101010101010101010101010101010401010101010101010101010101010101010104010401010101010101010101010101010101010104010101010101010101010101010101010101040104010101010101010101010101010101010101040101010101010101010101010101010101010401040101010101010101010101010101010101010401010101010101010101010101010101010104010401010101010101010101010101010101010104010101010101010101010101010101010101040106030303030303030303030303030303030303040303030303030303030303010101010101010401010101010101010101010101010101010101010401010101010101010101030101010101010104010101010101010101010101010101010101010104010101010101010101010301010101010101040303050101010101010101010101010101010101040101010101010101010103010101010101010401020401010101010101010101010101010101010401010101010101010101030101010101010104010104010d01010101010101010101010101010104010101010101010101010301010101010101040101060e0303030303030303030303030303030308010101010101010101010301010101010101040c0c0c0c0b01010101010101010101010101010101010101010101010101010301010101010101040a0a0a0a0a010101010101010101010101010101010101010101010101010103010101010101010409090909090101010101010101010101010101010101010101010101010101060303030303030308`, img`
+    Kiddo.destroy()
+    tiles.setTilemap(tiles.createTilemap(hex`28002000010703030303030303030303030303030303030303030303030303030303030303030303030303100f040201110c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0b010401011216161616161616161616161616161616161616161616161616161616161616161616150f0401011216161616161616161616161616161616161616161616161616161616161616161616150104010112161616161616161616161616161616161616161616161616161616161616161616161501040101130a0a0a0a0a0a0a1a161616161616161616161616161616161616161616161616161615010401010109090909090909130a0a0a0a0a0a0a0a1a1616161616190a0a0a0a0a0a0a0a0a0a0a140104110c0c0c0b010f0f01010109090909090909091216161616161509090909090909090909090101041216161615010101010101010101010101010112161616161615010101010101010101010101010412161616150101010101070303030303030305121616161616150101010101010101010101010104121616161502030303030801010101010101041216161616161501010f0f0101010101010101010412161616170c0c0c0c0c0c0c0c0c0c0c0c0b041216161616161501010101010101010101010101041216161616161616161616161616161616150412161616161615010f0101010101010101010101041216161616161616161616161616161616150412161616161615010f0101020303030303030501041216161616161616161616161616161616150412161616161615010101010101010101010104010412161616161616161616161616161616161504121616161616150101010101010101010101040104121616161616161616161616161616161615041216161616161501010101010101010101010401041216161616161616161616161616161616150412161616161615010101010101010101010104010412161616161616161616161616161616161504121616161616170c0c0c0c0c0c0c0c0c0c0b04010412161616161616161616161616161616161504121616161616161616161616161616161615040104130a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a1404130a0a0a0a0a0a0a0a0a0a16161616161615040104010909090909090909090909090909090901040109090909090909090909121616161616150401060303030303030303030303030303030303031803030303030303030303051216161616161504010101010101010101010101010101010101010104010101010101010101010412161616161615040101010101010101010101010101010101010101040101010f0101010101010412161616161615040303050101010101010f010101010101010f010104010101010101010101010412161616161615040102040101010101010101010f01010101010101040f010101010101010101041216161616161504010104010d01010101010101010101010101010104010101010101010101010412161616161615040101060e030303030303030303030303030303030801010101010f010101010412161616161615040c0c0c0c0b010101010f01010101010101010101010101010101010101010104130a0a0a0a0a14040a0a0a0a14010101010101010101010101010101010101010101010101010104010909090909010409090909090101010101010101010101010101010101010101010101010101060303030303030308`, img`
         ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
-        ........................................
+        2...222222222222222222222222222222222222
+        ....2..................................2
+        2...2..................................2
+        ....2..................................2
+        ....2..................................2
+        .....22222222..........................2
+        ..22222.22...22222222......222222222222.
+        ..2...2..............2.....2............
+        ..2...2..............2.....2............
+        ..2...2..............2.....2..22........
+        ..2....2222222222222.2.....2............
+        ..2................2.2.....2.2..........
+        ..2................2.2.....2.2..........
+        ..2................2.2.....2............
+        ..2................2.2.....2............
+        ..2................2.2.....2............
+        ..2................2.2.....2............
+        ..2................2.2.....222222222222.
+        ..2................2.2................2.
+        ..2................2.2................2.
+        ...2222222222222222...22222222222.....2.
+        ................................2.....2.
+        ................................2.....2.
+        ........................2.......2.....2.
+        .........2.......2..............2.....2.
+        ............2........2..........2.....2.
+        ................................2.....2.
+        ..........................2.....2.....2.
+        22222....2......................22....2.
+        ....2............................22222..
         22222...................................
-        ....2...................................
-        22222...................................
-        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile3,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile31,myTiles.tile34,myTiles.tile36,myTiles.tile43,myTiles.tile48], TileScale.Sixteen))
+        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile3,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile31,myTiles.tile34,myTiles.tile36,myTiles.tile43,myTiles.tile48,myTiles.tile17,myTiles.tile26,myTiles.tile28,myTiles.tile29,myTiles.tile30,myTiles.tile32,myTiles.tile33,myTiles.tile35,myTiles.tile37,myTiles.tile49,myTiles.tile39,myTiles.tile51], TileScale.Sixteen))
+    startLevel()
+    spawnFire()
+    CurrentLevel = 3
 }
 function Level1 () {
     tiles.setTilemap(tilemap`level_0`)
     startLevel()
+}
+function Level5 () {
+    Kiddo.destroy()
+    CurrentLevel = 5
+    tiles.setTilemap(tiles.createTilemap(hex`1400140001010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101020202020202020203010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101`, img`
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        ....................
+        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile10,myTiles.tile48], TileScale.Sixteen))
+    startLevel()
+    spawnWolf()
+    WolfyHealth = 6
+    WolfyIs = 1
 }
 function drawHUDMeter (percent: number, hudSprite: Sprite, onColor: number, offColor: number) {
     hudSprite.image.fill(offColor)
@@ -1004,7 +1058,11 @@ sprites.onOverlap(SpriteKind.Sword, SpriteKind.squirrel, function (sprite, other
     squirrelIs = 0
 })
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile26, function (sprite, location) {
-    Level11()
+    if (CurrentLevel == 3) {
+        Level4()
+    } else {
+        Level11()
+    }
 })
 function spawnRandGrass () {
     for (let value22 of tiles.getTilesByType(myTiles.tile1)) {
@@ -1076,6 +1134,7 @@ function spawnSquirrel () {
 }
 function Level11 () {
     Kiddo.destroy()
+    CurrentLevel = 1
     tiles.setTilemap(tilemap`level_2`)
     startLevel()
     spawnSpeaker()
@@ -1194,6 +1253,41 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
         if (squirrelIs > 0) {
             squirrelPath()
         }
+    }
+})
+function Level4 () {
+    Kiddo.destroy()
+    tiles.setTilemap(tiles.createTilemap(hex`1000100001010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101030101010101010402020202020202020101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101`, img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile10,myTiles.tile52,myTiles.tile48], TileScale.Sixteen))
+    startLevel()
+    CurrentLevel = 4
+}
+sprites.onOverlap(SpriteKind.Wolf, SpriteKind.exit, function (sprite, otherSprite) {
+    randSpawn = randint(1, 4)
+    if (randSpawn == 1) {
+        Wolfy.follow(WolfSpawn1)
+    } else if (randSpawn == 2) {
+        Wolfy.follow(WolfSpawn2)
+    } else if (randSpawn == 3) {
+        Wolfy.follow(WolfSpawn3)
+    } else {
+        Wolfy.follow(WolfSpawn4)
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.treatkind, function (sprite, otherSprite) {
@@ -1404,6 +1498,10 @@ function bearAnimate () {
         )
     }
 }
+scene.onOverlapTile(SpriteKind.Player, myTiles.tile52, function (sprite, location) {
+    game.splash("You go to sleep ", "and dream about howling...")
+    Level5()
+})
 sprites.onOverlap(SpriteKind.squirrel, SpriteKind.exit, function (sprite, otherSprite) {
     otherSprite.destroy()
     Berries.destroy()
@@ -1446,6 +1544,7 @@ function destroySprites () {
     }
 }
 function startLevel () {
+    CurrentLevel = 0
     destroySprites()
     scene.setBackgroundColor(7)
     spawnRandGrass()
@@ -1488,6 +1587,117 @@ function spawnBattery () {
         tiles.placeOnTile(battery, value)
         tiles.setTileAt(value, myTiles.tile11)
     }
+}
+function spawnWolf () {
+    WolfSpawn1 = sprites.create(img`
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 5 5 4 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 5 5 4 8 8 9 7 7 7 7 7 7 
+        7 7 7 7 7 6 7 8 8 9 7 7 7 7 7 7 
+        7 7 7 7 7 6 7 6 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 6 6 8 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 8 6 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 6 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 8 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        `, SpriteKind.exit)
+    WolfSpawn2 = sprites.create(img`
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 a a b 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 a a b d d 3 7 7 7 7 7 7 
+        7 7 7 7 7 6 7 d d 3 7 7 7 7 7 7 
+        7 7 7 7 7 6 7 6 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 6 6 8 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 8 6 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 6 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 8 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        `, SpriteKind.exit)
+    WolfSpawn3 = sprites.create(img`
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 2 2 4 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 2 2 4 2 2 3 7 7 7 7 7 7 
+        7 7 7 7 7 6 7 2 2 3 7 7 7 7 7 7 
+        7 7 7 7 7 6 7 6 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 6 6 8 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 8 6 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 6 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 8 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        `, SpriteKind.exit)
+    WolfSpawn4 = sprites.create(img`
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        f e 7 e e 7 e e e 7 e e e e 7 e 
+        e e e e e 7 e e e 5 e e e e e e 
+        e e e e e e e e e e e e e e e e 
+        e e e e e e e e e f e e e e e e 
+        e e e e e e e e e e e e e e e e 
+        e e e e f e e e e e e e e e e e 
+        e e e e e e e e e e e e e e f e 
+        e e e e e e e e e e e e e e e e 
+        e e e e e e e e e e e e e e e e 
+        e e e f e e e e f e e e e e e e 
+        e e e e e e e e e e e e e e e e 
+        e e e e e e e e e e e e e f e e 
+        e e e e c e e e 7 7 e e e e 7 e 
+        e 7 e e 7 e e e e 7 e e e e 7 e 
+        7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+        `, SpriteKind.exit)
+    WolfSpawn1.setPosition(Kiddo.x + 0, Kiddo.y + 64)
+    WolfSpawn2.setPosition(Kiddo.x + 64, Kiddo.y + 0)
+    WolfSpawn3.setPosition(Kiddo.x + 0, Kiddo.y - 64)
+    WolfSpawn4.setPosition(Kiddo.x - 64, Kiddo.y - 0)
+    WolfSpawn1.z = 1
+    WolfSpawn2.z = 1
+    WolfSpawn3.z = 1
+    WolfSpawn4.z = 1
+    Wolfy = sprites.create(img`
+        ................................
+        ................................
+        ................................
+        ................................
+        ........ff......................
+        .......fbf....................ff
+        ......fbbf...................fbf
+        .....ffbbf..................fbbf
+        ...ffbbbbbf................fbbbf
+        ..fbbbbbbbbfffffff........fbbbf.
+        ..fbbbbbbbbbbbbbbbffffffffbbbbf.
+        ...fbbffbbbbbbbbbbbbbbbbbbbbbf..
+        ....ffbbbbbbbbbbbbbbbbbbbbbbf...
+        ......fbbbbbbbbbbbbbbbbbbbbf....
+        .......fbbbbbbbbbbbbbbbbbbbf....
+        ........fbfbbbbbbbbbbbbbbbbf....
+        ........fbffffffffbbbbbbfbbf....
+        ........fbf.......ffbbbfbbbf....
+        ........fbf.........ffbfbbf.....
+        ........fbf..........fbfbbf.....
+        .......ffbf.........fbbfbbf.....
+        ......fbbbf.........fbfbbbf.....
+        ......ffff.........fffffff......
+        ................................
+        `, SpriteKind.Wolf)
+    Wolfy.z = 2
+    Wolfy.setPosition(WolfSpawn1.x - 0, WolfSpawn1.y - 0)
+    Wolfy.follow(WolfSpawn2, 70)
 }
 function spawnKiddo () {
     Kiddo = sprites.create(img`
@@ -1653,6 +1863,11 @@ function squirrelAnimate () {
 let moving = false
 let battery: Sprite = null
 let firePitIs = 0
+let WolfSpawn4: Sprite = null
+let WolfSpawn3: Sprite = null
+let WolfSpawn2: Sprite = null
+let WolfSpawn1: Sprite = null
+let randSpawn = 0
 let berriesIs = 0
 let speaker: Sprite = null
 let squirrelHealth = 0
@@ -1661,6 +1876,7 @@ let squirrelIs = 0
 let squirrelExit: Sprite = null
 let Berries: Sprite = null
 let fillWidth = 0
+let WolfyIs = 0
 let timer: Sprite = null
 let kiddoIntro: Sprite = null
 let daddoIntro: Sprite = null
@@ -1671,6 +1887,8 @@ let hungerTitle: Sprite = null
 let healthBar: Sprite = null
 let hungerBar: Sprite = null
 let firePit: Sprite = null
+let Wolfy: Sprite = null
+let WolfyHealth = 0
 let pockyIs = 0
 let Pocky: Sprite = null
 let bearSteak: Sprite = null
@@ -1684,6 +1902,8 @@ let healthPercent = 0
 let rewardHUD2: Sprite = null
 let rewardHUD1: Sprite = null
 let hasReward = 0
+let CurrentLevel = 0
+CurrentLevel = 0
 intro()
 spawnHUD()
 game.onUpdate(function () {

@@ -5,12 +5,63 @@ class SpriteKind:
     HUD = SpriteKind.create()
     bear = SpriteKind.create()
     squirrel = SpriteKind.create()
+    exit2 = SpriteKind.create()
+    fire = SpriteKind.create()
+    reward = SpriteKind.create()
+    bush = SpriteKind.create()
+    treatkind = SpriteKind.create()
+def rewardHUD():
+    global rewardHUD1, rewardHUD2
+    if hasReward > 0:
+        rewardHUD1 = sprites.create(img("""
+                b b b b b b b b b b b b b b b b b c 
+                            b . . . f f f f f f f . . . . . b c 
+                            b . . f c c c c c c c f . . 1 1 b c 
+                            b . f f c f f f f f c f f . 1 1 b c 
+                            b f c c f f f f f f f c c f 2 f b c 
+                            b f c f f f c c c f f f c f 2 f b c 
+                            b f c f f c f f f c f f c f 2 f b c 
+                            b f c f f c f f f c f f c f 2 f b c 
+                            b f c f f c f f f c f f c f 2 f b c 
+                            b f c f f f c c c f f f c f 2 f b c 
+                            b f c c f f f f f f f c c f 2 f b c 
+                            b . f f c f f f f f c f f 2 2 f b c 
+                            b . . f c c c c c c c f f f f f b c 
+                            b . . . f f f f f f f . . . . . b c 
+                            b b b b b b b b b b b b b b b b b c
+            """),
+            SpriteKind.HUD)
+        rewardHUD1.top = scene.screen_height() - 16
+        initHUDtitle(rewardHUD1)
+        rewardHUD1.left = 45
+    if hasReward > 1:
+        rewardHUD2 = sprites.create(img("""
+                b b b b b b b b b b b b b b b b b c 
+                            b d d f f f f f f f f f b . . . b c 
+                            b d d f 5 4 4 4 4 4 4 f b . 1 1 b c 
+                            b d f 5 4 4 4 4 4 f f d b . 1 1 b c 
+                            b d f 5 4 4 4 4 f d d d b . 2 f b c 
+                            b f 5 4 4 4 4 f d d d d b . 2 f b c 
+                            b f 4 4 4 4 4 f f f d d b . 2 f b c 
+                            b f f f f 5 4 4 4 f d d b . 2 f b c 
+                            b d d d f 5 4 4 f d d d b . 2 f b c 
+                            b d d f 5 4 4 f d d d d b . 2 f b c 
+                            b d d f 5 4 f d d d d d b . 2 f b c 
+                            b d f 5 4 f d d d d d d b 2 2 f b c 
+                            b f 4 4 f d d d d d d d b f f f b c 
+                            b f f f d d d d d d d d b . . . b c 
+                            b b b b b b b b b b b b b b b b b c
+            """),
+            SpriteKind.HUD)
+        rewardHUD2.top = scene.screen_height() - 16
+        initHUDtitle(rewardHUD2)
+        rewardHUD2.left = 63
 
 def on_on_overlap(sprite, otherSprite):
     global healthPercent
-    BearSprite.say("CHOMP", 500)
     healthPercent += -10
-    pause(1000)
+    BearSprite.say("CHOMP", 350)
+    pause(350)
 sprites.on_overlap(SpriteKind.bear, SpriteKind.player, on_on_overlap)
 
 # 0 - up
@@ -27,35 +78,177 @@ def on_up_pressed():
     walk()
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
 
+def on_overlap_tile(sprite, location):
+    game.splash("You go to sleep ", "and dream about batteries")
+    level3()
+scene.on_overlap_tile(SpriteKind.player, myTiles.tile46, on_overlap_tile)
+
 def squirrelPath():
     Squirrel.follow(Kiddo)
+
+def on_on_overlap2(sprite, otherSprite):
+    global BearHealth, bearIs, bearSteak
+    if BearHealth > 1:
+        BearHealth += -1
+    elif BearHealth == 1:
+        BearSprite.destroy()
+        bearIs = 0
+        bearSteak = sprites.create(img("""
+                . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . . . . . . . . . . . . . 
+                            . . . . f f f f f f f . . . . . 
+                            . . f f 3 3 3 3 3 3 f f f . . . 
+                            . . f 3 3 2 2 2 2 3 3 3 f f . . 
+                            . f f 3 2 2 2 2 2 2 2 3 3 f . . 
+                            f f 3 3 2 2 1 1 2 2 2 2 3 f f . 
+                            f 3 3 2 2 1 1 1 1 1 1 2 3 3 3 f 
+                            f 3 3 2 2 1 1 d d d 1 2 2 3 3 f 
+                            . f 3 3 2 2 2 2 2 d 2 2 2 3 3 f 
+                            . f f 3 3 2 2 2 2 2 2 3 3 3 f . 
+                            . . f f 3 3 3 3 3 3 3 3 f f . . 
+                            . . . f f f f f f f f f . . . . 
+                            . . . . . . . . . . . . . . . .
+            """),
+            SpriteKind.treatkind)
+        bearSteak.set_position(Kiddo.x + 0, Kiddo.y + 0)
+    pause(750)
+sprites.on_overlap(SpriteKind.Sword, SpriteKind.bear, on_on_overlap2)
+
 def spawnPocky():
-    global Pocky
+    global Pocky, pockyIs
     Pocky = sprites.create(img("""
-            f f f f f f f f f 
-                    2 2 2 2 2 2 2 2 2 
-                    2 2 2 2 2 2 2 2 2 
-                    2 4 4 2 4 2 2 4 2 
-                    2 4 4 2 4 2 2 4 2 
-                    2 f f 2 f 2 2 f 2 
-                    2 f 1 1 f 2 f f 2 
-                    2 2 1 f 1 1 f f 2 
-                    2 2 1 f f f 1 2 2 
-                    2 2 1 f f 1 1 2 2 
-                    2 2 1 1 1 f 2 2 2 
-                    2 2 1 f f f 2 2 2 
-                    2 2 1 f f f 2 2 2 
-                    2 2 1 f f f f 2 2 
-                    2 f f 2 f f f 2 2 
-                    f f 2 2 f 2 f f 2
+            f f f f f f f f f d 
+                    2 2 2 2 2 2 2 2 2 d 
+                    2 2 2 2 2 2 2 2 2 d 
+                    2 4 2 2 4 2 2 4 2 d 
+                    2 4 2 2 4 2 2 4 2 d 
+                    2 f 2 2 f 2 2 f 2 d 
+                    2 2 f 2 f 2 f 2 2 d 
+                    2 2 f 2 f 2 f 2 2 d 
+                    2 2 2 f f f 2 2 2 d 
+                    2 2 2 2 f 2 2 2 2 d 
+                    2 2 2 2 f 2 2 2 2 d 
+                    2 2 2 f f f 2 2 2 d 
+                    2 2 2 f f f 2 2 2 d 
+                    2 2 f 2 f 2 f 2 2 d 
+                    2 2 f 2 f 2 f 2 2 d 
+                    2 f 2 2 f 2 2 f 2 d
         """),
-        SpriteKind.food)
+        SpriteKind.treatkind)
+    pockyIs = 1
     for value in tiles.get_tiles_by_type(myTiles.tile3):
         tiles.place_on_tile(Pocky, value)
+def spawnFire():
+    global firePit
+    firePit = sprites.create(img("""
+            . . . . . . . . f . . . . . . . 
+                    . . . . . . . f 2 f . . . . . . 
+                    . . . . . . f 2 4 2 f . . . . . 
+                    . . . . . f 2 2 4 2 2 f . . . . 
+                    . . . . f 2 2 4 4 4 2 2 f . . . 
+                    . . . f 2 2 4 4 5 4 4 2 2 f . . 
+                    . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
+                    . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
+                    . . . f 2 2 4 4 4 4 4 2 2 f . . 
+                    . f f . f 2 2 2 2 2 2 2 f . f . 
+                    f e e f f f f 2 2 2 f f f f e f 
+                    . f f e e e e f f f e e e e f . 
+                    f . . f f f f e e e f f f f . . 
+                    . f f e e e e f f f e e e e f . 
+                    f e e f f f f . . . f f f f e f 
+                    . f f . . . . . . . . . . . f .
+        """),
+        SpriteKind.fire)
+    animation.run_image_animation(firePit,
+        [img("""
+                . . . . . . . . f . . . . . . . 
+                        . . . . . . . f 2 f . . . . . . 
+                        . . . . . . f 2 2 2 f . . . . . 
+                        . . . . . f 2 2 4 2 2 f . . . . 
+                        . . . . f 2 2 4 4 4 2 2 f . . . 
+                        . . . f 2 2 4 4 4 4 4 2 2 f . . 
+                        . . f 2 2 4 4 4 5 4 4 4 2 2 f . 
+                        . . f 2 2 4 4 5 5 5 4 4 2 2 f . 
+                        . . . f 2 2 4 5 1 5 4 2 2 f . . 
+                        . f f . f 2 2 2 2 2 2 2 f . f . 
+                        f e e f f f f 2 2 2 f f f f e f 
+                        . f f e e e e f f f e e e e f . 
+                        f . . f f f f e e e f f f f . . 
+                        . f f e e e e f f f e e e e f . 
+                        f e e f f f f . . . f f f f e f 
+                        . f f . . . . . . . . . . . f .
+            """),
+            img("""
+                . . . . . . . . . . . . . . . . 
+                        . . . . . . . . f . . . . . . . 
+                        . . . . . . . f 2 f . . . . . . 
+                        . . . . . . f 2 2 2 f . . . . . 
+                        . . . . . f 2 2 4 2 2 f . . . . 
+                        . . . . f 2 2 4 4 4 2 2 f . . . 
+                        . . . f 2 2 4 4 4 4 4 2 2 f . . 
+                        . . f 2 2 2 4 4 5 4 4 2 2 2 f . 
+                        . . . f 2 2 4 5 5 5 4 2 2 f . . 
+                        . f f . f 2 2 2 2 2 2 2 f . f . 
+                        f e e f f f f 2 2 2 f f f f e f 
+                        . f f e e e e f f f e e e e f . 
+                        f . . f f f f e e e f f f f . . 
+                        . f f e e e e f f f e e e e f . 
+                        f e e f f f f . . . f f f f e f 
+                        . f f . . . . . . . . . . . f .
+            """),
+            img("""
+                . . . . . . . . . . . . . . . . 
+                        . . . . . . . . . . . . . . . . 
+                        . . . . . . . . f . . . . . . . 
+                        . . . . . . . f 2 f . . . . . . 
+                        . . . . . . f 2 2 2 f . . . . . 
+                        . . . . . f 2 2 2 2 2 f . . . . 
+                        . . . . f 2 2 2 4 2 2 2 f . . . 
+                        . . . f 2 2 2 4 5 4 2 2 2 f . . 
+                        . . . f 2 2 4 5 5 5 4 2 2 f . . 
+                        . f f . f 2 2 2 2 2 2 2 f . f . 
+                        f e e f f f f 2 2 2 f f f f e f 
+                        . f f e e e e f f f e e e e f . 
+                        f . . f f f f e e e f f f f . . 
+                        . f f e e e e f f f e e e e f . 
+                        f e e f f f f . . . f f f f e f 
+                        . f f . . . . . . . . . . . f .
+            """),
+            img("""
+                . . . . . . . . . . . . . . . . 
+                        . . . . . . . . f . . . . . . . 
+                        . . . . . . . f 2 f . . . . . . 
+                        . . . . . . f 2 2 2 f . . . . . 
+                        . . . . . f 2 2 4 2 2 f . . . . 
+                        . . . . f 2 2 4 4 4 2 2 f . . . 
+                        . . . f 2 2 4 4 4 4 4 2 2 f . . 
+                        . . f 2 2 2 4 4 5 4 4 2 2 2 f . 
+                        . . . f 2 2 4 5 5 5 4 2 2 f . . 
+                        . f f . f 2 2 2 2 2 2 2 f . f . 
+                        f e e f f f f 2 2 2 f f f f e f 
+                        . f f e e e e f f f e e e e f . 
+                        f . . f f f f e e e f f f f . . 
+                        . f f e e e e f f f e e e e f . 
+                        f e e f f f f . . . f f f f e f 
+                        . f f . . . . . . . . . . . f .
+            """)],
+        200,
+        True)
+    for value2 in tiles.get_tiles_by_type(myTiles.tile43):
+        tiles.place_on_tile(firePit, value2)
+        tiles.set_tile_at(value2, myTiles.transparency16)
 def initHUDtitle(hudSprite: Sprite):
     hudSprite.z = 200
     hudSprite.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
     hudSprite.left = 0
+
+def on_overlap_tile2(sprite, location):
+    game.splash("You go to sleep ", "and dream about speakers")
+    Level2()
+scene.on_overlap_tile(SpriteKind.player, myTiles.tile42, on_overlap_tile2)
+
 def spawnHUD():
     global hungerBar, healthBar, hungerTitle, meterWidth, hungerPercent, healthPercent
     hungerBar = sprites.create(img("""
@@ -122,6 +315,14 @@ def spawnHUD():
     initHUDtitle(hungerTitle)
     hungerPercent = 100
     healthPercent = 100
+def Level2():
+    Kiddo.destroy()
+    tiles.set_tilemap(tilemap("""
+        level_1
+    """))
+    startLevel()
+    spawnFire()
+    spawnBattery()
 
 def on_a_pressed():
     if lastDirection == 0:
@@ -430,6 +631,52 @@ def on_a_pressed():
             False)
 controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
 
+def intro():
+    global daddoIntro, kiddoIntro
+    daddoIntro = sprites.create(img("""
+            . e e e . . 
+                    e e e e e . 
+                    e e e d . . 
+                    . e e e e . 
+                    . . d e e . 
+                    . . 6 . e . 
+                    . . 6 . . . 
+                    . . 6 6 d . 
+                    . . e . . . 
+                    . . 8 . . . 
+                    . . 8 . . . 
+                    . . 8 . . . 
+                    . . e . . . 
+                    . . e e . .
+        """),
+        SpriteKind.player)
+    daddoIntro.set_position(32, 16)
+    kiddoIntro = sprites.create(img("""
+            . 6 6 6 6 6 . . . . . . . . . . 
+                    e e e 6 6 6 6 . . . . . . . . . 
+                    e f e 6 6 6 6 . . . . . . . . . 
+                    . 6 e 6 6 6 6 . . . . . . . . . 
+                    . d e 6 6 6 . . . . . . . . . . 
+                    . d d e 6 6 . . . . . . . . . . 
+                    . . e e 6 9 . . . . . . . . . . 
+                    . . 6 6 9 9 9 . . . . . . . . . 
+                    . . e 6 6 9 9 9 . . . . . . . . 
+                    . . 8 6 6 9 9 9 . . . . . . . . 
+                    . d 6 6 6 9 9 9 . . . . . . . . 
+                    . . 8 6 . 9 9 . . . . . . . . . 
+                    . . e 8 . . . . . . . . . . . . 
+                    . . e 8 . . . . . . . . . . . . 
+                    . . . 8 . . . . . . . . . . . . 
+                    . . 3 3 . . . . . . . . . . . .
+        """),
+        SpriteKind.player)
+    kiddoIntro.set_position(128, 31)
+    game.splash("Kiddo", "Enough screen time...")
+    game.splash("Grab your backpack and trekking poles")
+    game.splash("You're taking a hike")
+    kiddoIntro.destroy()
+    daddoIntro.destroy()
+    Level1()
 def walk():
     if lastDirection == 0:
         animation.run_image_animation(Kiddo,
@@ -729,44 +976,44 @@ def createTimer(ms: number):
         SpriteKind.Timer)
     timer.set_flag(SpriteFlag.GHOST, True)
     timer.lifespan = ms
-def Level1():
-    scene.set_background_color(7)
+def level3():
+    Kiddo.destroy()
     tiles.set_tilemap(tiles.create_tilemap(hex("""
-                200020000a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a030303030303030303030303030303030303030501010101010101010101010b0c0101070101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010701010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010701010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101070101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101070401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010107010b0c0101010101010101070101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010107010101010101010101010101010407010101010101010101010b0c0101010803030303030303030303030303030901010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101070b0c0101010401010101010101010101010101010101010101010101010101010b0c010e010401010101010101010101010101010101010101010101010101010b0c0b0d0c0401010701010101010101010101010701010101010101010101020b0c010a0106030303030303030303030303030303030303030303030303030303
+                28002000010703030303030303030303030303030303030303030303030303030303030303030303030303100f040201110c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0b010401011216161616161616161616161616161616161616161616161616161616161616161616150f0401011216161616161616161616161616161616161616161616161616161616161616161616150104010112161616161616161616161616161616161616161616161616161616161616161616161501040101130a0a0a0a0a0a0a16161616161616161616161616161616161616161616161616161615010401010109090909090909130a0a0a0a0a0a0a0a161616161616161616161616161616161616140104110c0c0c0b010f0f01010109090909090909091216161616161509090909090909090909090101041216161615010101010101010101010101010112161616161615010101010101010101010101010412161616150101010101070303030303030305121616161616150101010101010101010101010104121616161502030303030801010101010101041216161616161501010f0f0101010101010101010412161616170c0c0c0c0c0c0c0c0c0c0c0c0b041216161616161501010101010101010101010101041216161616161616161616161616161616150412161616161615010f0101010101010101010101041216161616161616161616161616161616150412161616161615010f0101020303030303030501041216161616161616161616161616161616150412161616161615010101010101010101010104010412161616161616161616161616161616161504121616161616150101010101010101010101040104121616161616161616161616161616161615041216161616161501010101010101010101010401041216161616161616161616161616161616150412161616161615010101010101010101010104010412161616161616161616161616161616161504121616161616170c0c0c0c0c0c0c0c0c0c0b04010412161616161616161616161616161616161504121616161616161616161616161616161615040104130a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a1404130a0a0a0a0a0a0a0a0a0a16161616161615040104010909090909090909090909090909090901040109090909090909090909121616161616150401060303030303030303030303030303030303031803030303030303030303051216161616161504010101010101010101010101010101010101010104010101010101010101010412161616161615040101010101010101010101010101010101010101040101010f0101010101010412161616161615040303050101010101010f010101010101010f010104010101010101010101010412161616161615040102040101010101010101010f01010101010101040f010101010101010101041216161616161504010104010d01010101010101010101010101010104010101010101010101010412161616161615040101060e030303030303030303030303030303030801010101010f010101010412161616161615040c0c0c0c0b010101010f01010101010101010101010101010101010101010104130a0a0a0a0a14040a0a0a0a0a010101010101010101010101010101010101010101010101010104010909090909010409090909090101010101010101010101010101010101010101010101010101060303030303030308
             """),
             img("""
-                22222222222222222222222222222222
-                        ...............................2
-                        2..2...........................2
-                        2...........................2..2
-                        2..............................2
-                        2..............................2
-                        2..............................2
-                        2..............................2
-                        2.........2....................2
-                        2..............................2
-                        2..2...........................2
-                        2..............................2
-                        2..............................2
-                        2.................2............2
-                        2............................2.2
-                        2........2.....................2
-                        2..............................2
-                        2..............................2
-                        2..............................2
-                        2..............................2
-                        2..............................2
-                        2....2..............2..........2
-                        2..............................2
-                        2..............................2
-                        2..............................2
-                        2..............................2
-                        2..............................2
-                        2.............................22
-                        2..............................2
-                        2.2............................2
-                        2222...2...........2...........2
-                        2.2.............................
+                ........................................
+                        ....222222222222222222222222222222222222
+                        ....2..................................2
+                        ....2..................................2
+                        ....2..................................2
+                        ....2..................................2
+                        .....22222222..........................2
+                        ..22222.......2222222......222222222222.
+                        ..2...2..............2.....2............
+                        ..2...2..............2.....2............
+                        ..2...2..............2.....2............
+                        ..2....2222222222222.2.....2............
+                        ..2................2.2.....2............
+                        ..2................2.2.....2............
+                        ..2................2.2.....2............
+                        ..2................2.2.....2............
+                        ..2................2.2.....2............
+                        ..2................2.2.....2............
+                        ..2................2.2.....222222222222.
+                        ..2................2.2................2.
+                        ..2................2.2................2.
+                        ...2222222222222222...22222222222.....2.
+                        ................................2.....2.
+                        ................................2.....2.
+                        ................................2.....2.
+                        ................................2.....2.
+                        ................................2.....2.
+                        ................................2.....2.
+                        ................................2.....2.
+                        22222...........................22....2.
+                        ....2............................22222..
+                        22222...................................
             """),
             [myTiles.transparency16,
                 myTiles.tile1,
@@ -775,48 +1022,69 @@ def Level1():
                 myTiles.tile11,
                 myTiles.tile12,
                 myTiles.tile13,
-                myTiles.tile17,
                 myTiles.tile18,
                 myTiles.tile19,
                 myTiles.tile20,
-                myTiles.tile21,
-                myTiles.tile22,
-                myTiles.tile23,
-                myTiles.tile24],
+                myTiles.tile31,
+                myTiles.tile34,
+                myTiles.tile36,
+                myTiles.tile43,
+                myTiles.tile48,
+                myTiles.tile17,
+                myTiles.tile26,
+                myTiles.tile28,
+                myTiles.tile29,
+                myTiles.tile30,
+                myTiles.tile32,
+                myTiles.tile33,
+                myTiles.tile35,
+                myTiles.tile37,
+                myTiles.tile49],
             TileScale.SIXTEEN))
-    spawnRandGrass()
-    spawnKiddo()
-    spawnPocky()
-    tiles.place_on_tile(Kiddo, tiles.get_tile_location(0, 1))
+    startLevel()
+    spawnFire()
+def Level1():
+    tiles.set_tilemap(tilemap("""
+        level_0
+    """))
+    startLevel()
 def drawHUDMeter(percent: number, hudSprite: Sprite, onColor: number, offColor: number):
     global fillWidth
     hudSprite.image.fill(offColor)
     fillWidth = percent * meterWidth / 100
     hudSprite.image.fill_rect(0, 0, fillWidth, hudSprite.height, onColor)
 
-def on_on_overlap2(sprite, otherSprite):
-    Berries.destroy()
-    Squirrel.destroy()
-sprites.on_overlap(SpriteKind.squirrel, SpriteKind.food, on_on_overlap2)
-
 def on_on_overlap3(sprite, otherSprite):
+    Berries.follow(Squirrel, 100)
+    Squirrel.follow(squirrelExit, 48)
+sprites.on_overlap(SpriteKind.squirrel, SpriteKind.food, on_on_overlap3)
+
+def on_on_overlap4(sprite, otherSprite):
+    global squirrelIs
     Squirrel.destroy()
-sprites.on_overlap(SpriteKind.Sword, SpriteKind.squirrel, on_on_overlap3)
+    squirrelIs = 0
+sprites.on_overlap(SpriteKind.Sword, SpriteKind.squirrel, on_on_overlap4)
+
+def on_overlap_tile3(sprite, location):
+    Level11()
+scene.on_overlap_tile(SpriteKind.player, myTiles.tile26, on_overlap_tile3)
 
 def spawnRandGrass():
-    for value2 in tiles.get_tiles_by_type(myTiles.tile1):
+    for value22 in tiles.get_tiles_by_type(myTiles.tile1):
         if randint(1, 3) == 1:
-            tiles.set_tile_at(value2, myTiles.tile9)
+            tiles.set_tile_at(value22, myTiles.tile9)
         elif randint(1, 2) == 1:
-            tiles.set_tile_at(value2, myTiles.tile7)
+            tiles.set_tile_at(value22, myTiles.tile7)
         elif randint(1, 2) == 1:
-            tiles.set_tile_at(value2, myTiles.tile4)
+            tiles.set_tile_at(value22, myTiles.tile4)
         elif randint(1, 6) == 1:
-            tiles.set_tile_at(value2, myTiles.tile5)
+            tiles.set_tile_at(value22, myTiles.tile5)
         elif randint(1, 6) == 1:
-            tiles.set_tile_at(value2, myTiles.tile6)
+            tiles.set_tile_at(value22, myTiles.tile6)
+        elif randint(1, 6) == 1:
+            tiles.set_tile_at(value22, myTiles.tile40)
         else:
-            tiles.set_tile_at(value2, myTiles.tile8)
+            tiles.set_tile_at(value22, myTiles.tile8)
 def initHUDSprite(hudSprite: Sprite):
     hudSprite.z = 200
     hudSprite.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
@@ -830,7 +1098,29 @@ def on_right_pressed():
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 def spawnSquirrel():
-    global Squirrel, squirrelHealth, squirrelIs
+    global squirrelExit, squirrelExitIs, Squirrel, squirrelHealth, squirrelIs
+    squirrelExit = sprites.create(img("""
+            . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . e b b b b . . . . . . . 
+                    . . . e b b f f b b . . . . . . 
+                    . . . e b f f f f b . . . . . . 
+                    . . . e b f f f f b . . . . . . 
+                    . . . e b f f f f b . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . .
+        """),
+        SpriteKind.exit2)
+    squirrelExitIs = 1
+    squirrelExit.set_position(Kiddo.x + 80, Kiddo.y + 32)
+    squirrelExit.z = 1
     Squirrel = sprites.create(img("""
             . . . c . b . . . . . b b b b . 
                     . . b b b . . . . . b b b b b b 
@@ -844,40 +1134,18 @@ def spawnSquirrel():
                     . . . . b b b b . . . . . . . .
         """),
         SpriteKind.squirrel)
-    Squirrel.set_position(Kiddo.x + 50, Kiddo.y + 50)
-    Squirrel.follow(Berries, 75)
+    Squirrel.set_position(squirrelExit.x - 16, squirrelExit.y - 16)
+    Squirrel.follow(Berries, 70)
     squirrelHealth = 1
     squirrelIs = 1
-
-def on_on_overlap4(sprite, otherSprite):
-    global BearHealth, bearIs, bearSteak
-    if BearHealth > 1:
-        BearHealth += -1
-    elif BearHealth == 1:
-        BearSprite.destroy()
-        bearIs = 0
-        bearSteak = sprites.create(img("""
-                . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . . . . . . . . . . . . . 
-                            . . . . f f f f f f f . . . . . 
-                            . . f f 3 3 3 3 3 3 f f f . . . 
-                            . . f 3 3 2 2 2 2 3 3 3 f f . . 
-                            . f f 3 2 2 2 2 2 2 2 3 3 f . . 
-                            f f 3 3 2 2 1 1 2 2 2 2 3 f f . 
-                            f 3 3 2 2 1 1 1 1 1 1 2 3 3 3 f 
-                            f 3 3 2 2 1 1 d d d 1 2 2 3 3 f 
-                            . f 3 3 2 2 2 2 2 d 2 2 2 3 3 f 
-                            . f f 3 3 2 2 2 2 2 2 3 3 3 f . 
-                            . . f f 3 3 3 3 3 3 3 3 f f . . 
-                            . . . f f f f f f f f f . . . . 
-                            . . . . . . . . . . . . . . . .
-            """),
-            SpriteKind.food)
-        bearSteak.set_position(Kiddo.x + 0, Kiddo.y + 0)
-    pause(1000)
-sprites.on_overlap(SpriteKind.bear, SpriteKind.Sword, on_on_overlap4)
+def Level11():
+    Kiddo.destroy()
+    tiles.set_tilemap(tilemap("""
+        level_2
+    """))
+    startLevel()
+    spawnSpeaker()
+    spawnFire()
 
 def on_down_pressed():
     global lastDirection
@@ -886,54 +1154,130 @@ def on_down_pressed():
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
 def on_hit_wall(sprite, location):
+    global squirrelIs, squirrelExitIs
+    Squirrel.destroy()
+    squirrelExit.destroy()
+    Berries.destroy()
+    squirrelIs = 0
+    squirrelExitIs = 0
+scene.on_hit_wall(SpriteKind.squirrel, on_hit_wall)
+
+def spawnSpeaker():
+    global speaker
+    speaker = sprites.create(img("""
+            ...................
+                    ....fffffff.....11.
+                    .fffcccccccfff.1111
+                    .fccfffffffccf.1111
+                    ffcfcccccccfcff.2f.
+                    fcfccfffffccfcf.2f.
+                    fcfcfffffffcfcf.2f.
+                    fcfcfffffffcfcf.2f.
+                    fcfcfffffffcfcf.2f.
+                    fcfcfffffffcfcf.2f.
+                    fcfcfffffffcfcf.2f.
+                    fcfccfffffccfcf.2f.
+                    ffcfcccccccfcff22f.
+                    .fccfffffffccfffff.
+                    .fffcccccccfff.....
+                    ...fffffffff.......
+        """),
+        SpriteKind.reward)
+    for value3 in tiles.get_tiles_by_type(myTiles.tile41):
+        tiles.place_on_tile(speaker, value3)
+        tiles.set_tile_at(value3, myTiles.tile11)
+
+def on_hit_wall2(sprite, location):
     global Berries, berriesIs
     if controller.A.is_pressed():
-        for value3 in [CollisionDirection.LEFT,
+        for value32 in [CollisionDirection.LEFT,
             CollisionDirection.RIGHT,
             CollisionDirection.TOP,
             CollisionDirection.BOTTOM]:
-            if tiles.tile_is(tiles.location_in_direction(tiles.location_of_sprite(Trekking_Pole), value3),
+            if tiles.tile_is(tiles.location_in_direction(tiles.location_of_sprite(Trekking_Pole), value32),
                 myTiles.tile17):
                 tiles.set_wall_at(location, False)
-                Berries = sprites.create(img("""
-                        . . . . . . . . . f . . . . . . 
-                                            . . . . . f f . f 7 f . f . . . 
-                                            . . . f f 8 8 f f 7 f f 7 f . . 
-                                            . . . f 8 8 8 a f 7 f 7 f . . . 
-                                            . . f f 8 8 8 a f 7 7 f . . . . 
-                                            . f 8 8 f 8 a a f f f . . . . . 
-                                            f 8 8 8 8 f f f 8 8 f f . . . . 
-                                            f 8 8 8 a f 8 8 8 8 8 f . . . . 
-                                            f 8 8 8 a f f 8 8 8 a f . . . . 
-                                            . f a a f . . f a a f . . . . . 
-                                            . . f f . . . . f f . . . . . . 
-                                            . . . . . . . . . . . . . . . . 
-                                            . . . . . . . . . . . . . . . . 
-                                            . . . . . . . . . . . . . . . . 
-                                            . . . . . . . . . . . . . . . . 
-                                            . . . . . . . . . . . . . . . .
-                    """),
-                    SpriteKind.food)
+                if randint(0, 1) == 0:
+                    Berries = sprites.create(img("""
+                            . . . . . . . . . f . . . . . . 
+                                                    . . . . . f f . f 7 f . f . . . 
+                                                    . . . f f 8 8 f f 7 f f 7 f . . 
+                                                    . . . f 8 8 8 a f 7 f 7 f . . . 
+                                                    . . f f 8 8 8 a f 7 7 f . . . . 
+                                                    . f 8 8 f 8 a a f f f . . . . . 
+                                                    f 8 8 8 8 f f f 8 8 f f . . . . 
+                                                    f 8 8 8 a f 8 8 8 8 8 f . . . . 
+                                                    f 8 8 8 a f f 8 8 8 a f . . . . 
+                                                    . f a a f . . f a a f . . . . . 
+                                                    . . f f . . . . f f . . . . . . 
+                                                    . . . . . . . . . . . . . . . . 
+                                                    . . . . . . . . . . . . . . . . 
+                                                    . . . . . . . . . . . . . . . . 
+                                                    . . . . . . . . . . . . . . . . 
+                                                    . . . . . . . . . . . . . . . .
+                        """),
+                        SpriteKind.food)
+                else:
+                    Berries = sprites.create(img("""
+                            . . . . . . . f . . . . . . . . 
+                                                    . . . . . f f 7 f f . . . . . . 
+                                                    . . . . f 7 7 7 7 7 f . . . . . 
+                                                    . . f f 2 f f 7 f f 2 f f . . . 
+                                                    . . f 2 3 2 2 f 2 4 2 4 f . . . 
+                                                    . . f 3 2 3 2 3 2 1 4 2 f . . . 
+                                                    . . f 2 3 2 3 2 4 1 2 4 f . . . 
+                                                    . . . f 2 4 2 4 2 4 2 f . . . . 
+                                                    . . . f 4 2 4 2 4 2 4 f . . . . 
+                                                    . . . f 2 4 2 4 2 4 2 f . . . . 
+                                                    . . . . f 2 4 2 4 2 f . . . . . 
+                                                    . . . . f 4 2 4 2 4 f . . . . . 
+                                                    . . . . f 2 4 2 4 2 f . . . . . 
+                                                    . . . . . f 2 4 2 f . . . . . . 
+                                                    . . . . . . f f f . . . . . . . 
+                                                    . . . . . . . . . . . . . . . .
+                        """),
+                        SpriteKind.food)
                 tiles.place_on_tile(Berries, location)
                 tiles.set_tile_at(location, myTiles.tile7)
                 berriesIs += 1
-                spawnSquirrel()
-                if randint(0, 4) == 0:
-                    spawnBear()
-scene.on_hit_wall(SpriteKind.Sword, on_hit_wall)
+                if squirrelIs == 0 and bearIs == 0:
+                    if randint(0, 1) == 0:
+                        spawnSquirrel()
+                    elif randint(0, 3) == 0:
+                        spawnBear()
+scene.on_hit_wall(SpriteKind.Sword, on_hit_wall2)
 
 def on_on_overlap5(sprite, otherSprite):
+    global hasReward
+    game.splash("You found some trash!")
+    game.splash("You love trash!")
+    otherSprite.destroy()
+    hasReward += 1
+    rewardHUD()
+sprites.on_overlap(SpriteKind.player, SpriteKind.reward, on_on_overlap5)
+
+def on_on_overlap6(sprite, otherSprite):
     global hungerPercent, healthPercent, berriesIs
     hungerPercent += 10
-    if hungerPercent > 100:
+    if hungerPercent >= 100:
         hungerPercent = 100
         healthPercent += 20
     otherSprite.destroy(effects.disintegrate, 200)
     pause(200)
     if berriesIs > 0:
         berriesIs += -1
-        squirrelPath()
-sprites.on_overlap(SpriteKind.player, SpriteKind.food, on_on_overlap5)
+        if squirrelIs > 0:
+            squirrelPath()
+sprites.on_overlap(SpriteKind.player, SpriteKind.food, on_on_overlap6)
+
+def on_on_overlap7(sprite, otherSprite):
+    global hungerPercent, healthPercent
+    hungerPercent += 20
+    if hungerPercent > 100:
+        hungerPercent = 100
+        healthPercent += 40
+    otherSprite.destroy(effects.disintegrate, 200)
+sprites.on_overlap(SpriteKind.player, SpriteKind.treatkind, on_on_overlap7)
 
 def spawnBear():
     global BearSprite, BearHealth, bearIs
@@ -966,7 +1310,7 @@ def spawnBear():
         SpriteKind.bear)
     BearSprite.set_position(Kiddo.x + 50, Kiddo.y + 50)
     BearSprite.follow(Kiddo, 55)
-    BearHealth = 3
+    BearHealth = 4
     bearIs = 1
 def bearAnimate():
     BearSprite.set_image(BearSprite.image)
@@ -1135,17 +1479,87 @@ def bearAnimate():
             200,
             True)
 
-def on_on_overlap6(sprite, otherSprite):
+def on_on_overlap8(sprite, otherSprite):
+    global squirrelIs
+    otherSprite.destroy()
+    Berries.destroy()
+    Squirrel.destroy()
+    squirrelIs = 0
+sprites.on_overlap(SpriteKind.squirrel, SpriteKind.exit2, on_on_overlap8)
+
+def destroySprites():
+    global berriesIs, squirrelIs, squirrelExitIs, bearIs, pockyIs, firePitIs
+    for value4 in sprites.all_of_kind(SpriteKind.reward):
+        value4.destroy()
+    for value42 in sprites.all_of_kind(SpriteKind.exit2):
+        value42.destroy()
+    for value5 in sprites.all_of_kind(SpriteKind.fire):
+        value5.destroy()
+    if berriesIs > 0:
+        berriesIs = 0
+        Berries.destroy()
+    if squirrelIs > 0:
+        squirrelIs = 0
+        Squirrel.destroy()
+    if squirrelExitIs > 0:
+        squirrelExitIs = 0
+        squirrelExit.destroy()
+    if bearIs > 0:
+        bearIs = 0
+        BearSprite.destroy()
+    if pockyIs > 0:
+        pockyIs = 0
+        Pocky.destroy()
+    if firePitIs > 0:
+        firePitIs = 0
+        firePit.destroy()
+def startLevel():
+    global berriesIs
+    destroySprites()
+    scene.set_background_color(7)
+    spawnRandGrass()
+    spawnPocky()
+    spawnKiddo()
+    berriesIs = 0
+    tiles.place_on_random_tile(Kiddo, myTiles.tile48)
+    for value6 in tiles.get_tiles_by_type(myTiles.tile48):
+        tiles.set_tile_at(value6, myTiles.tile10)
+
+def on_on_overlap9(sprite, otherSprite):
     global healthPercent
     healthPercent += -5
-    pause(1000)
-sprites.on_overlap(SpriteKind.player, SpriteKind.squirrel, on_on_overlap6)
+    pause(250)
+sprites.on_overlap(SpriteKind.player, SpriteKind.squirrel, on_on_overlap9)
 
 def on_on_destroyed(sprite):
     animation.stop_animation(animation.AnimationTypes.ALL, Kiddo)
     walk()
 sprites.on_destroyed(SpriteKind.Timer, on_on_destroyed)
 
+def spawnBattery():
+    global battery
+    battery = sprites.create(img("""
+            ddddffffffffddb....
+                    ddddf544444fddb.11.
+                    dddf544444fdddb1111
+                    dddf54444fddddb1111
+                    ddf54444fdddddb.2f.
+                    ddf5444ffffdddb.2f.
+                    df44444444fdddb.2f.
+                    dffff5444fddddb.2f.
+                    ddddf544fdddddb.2f.
+                    dddf544fddddddb.2f.
+                    dddf44fdddddddb.2f.
+                    ddf54fddddddddb.2f.
+                    ddf4fdddddddddb22f.
+                    df4fddddddddddbfff.
+                    dffdddddddddddb....
+                    44444444444444c....
+        """),
+        SpriteKind.reward)
+    for value7 in tiles.get_tiles_by_type(myTiles.tile47):
+        tiles.place_on_tile(battery, value7)
+        tiles.set_tile_at(value7, myTiles.tile11)
 def spawnKiddo():
     global Kiddo, Trekking_Pole
     Kiddo = sprites.create(img("""
@@ -1167,6 +1581,7 @@ def spawnKiddo():
                     . . . . . . . 3 3 . . . . . . .
         """),
         SpriteKind.player)
+    Kiddo.z = 3
     controller.move_sprite(Kiddo, 50, 50)
     Trekking_Pole = sprites.create(img("""
             . . . . . . . . . . . . . . . . 
@@ -1251,88 +1666,103 @@ def squirrelAnimate():
     else:
         animation.run_image_animation(Squirrel,
             [img("""
-                ....................
-                ....................
-                ....................
-                ....................
-                ..bbbb..............
-                .bbbbbb.............
-                .bddbbb......b.c....
-                .bdddbbb......bbb...
-                ....ddbbb.....bbfb..
-                .....ddbb.....bbbbb.
-                ......dbb..bbbbd....
-                .......bbbbbbbbd....
-                ........bbbbddbb....
-                .........bbbb..bb...
-                ....................
-                ....................
-            """),
-                img("""
                     ....................
-                ....................
-                ....................
-                ....................
-                ....................
-                ..bbbb..............
-                .bbbbbb....b.c......
-                .bddbbb.....bbb.....
-                .bdddbbb....bbfb....
-                ....ddbbb...bbbbb...
-                .....ddbb...bb......
-                ......dbb.bbbbb.....
-                .......bbbbbbdb.....
-                ........bbbddd......
-                .........bbbb.......
-                ....................
+                                ....................
+                                ....................
+                                ....................
+                                ..bbbb..............
+                                .bbbbbb.............
+                                .bddbbb......b.c....
+                                .bdddbbb......bbb...
+                                ....ddbbb.....bbfb..
+                                .....ddbb.....bbbbb.
+                                ......dbb..bbbbd....
+                                .......bbbbbbbbd....
+                                ........bbbbddbb....
+                                .........bbbb..bb...
+                                ....................
+                                ....................
                 """),
                 img("""
                     ....................
-                ....................
-                ....................
-                ....................
-                ....................
-                ....bbbb.....b.c....
-                ...bbbbbb.....bbb...
-                ...bddbbb.....bbfb..
-                ...bdddbbb....bbbbb.
-                ......ddbbb...bd....
-                .......ddbb.bbbbb...
-                ........dbb.bbbd....
-                .........bbbbddd....
-                ..........bbbdd.....
-                ...........bbbb.....
-                ....................
+                                ....................
+                                ....................
+                                ....................
+                                ....................
+                                ..bbbb..............
+                                .bbbbbb....b.c......
+                                .bddbbb.....bbb.....
+                                .bdddbbb....bbfb....
+                                ....ddbbb...bbbbb...
+                                .....ddbb...bb......
+                                ......dbb.bbbbb.....
+                                .......bbbbbbdb.....
+                                ........bbbddd......
+                                .........bbbb.......
+                                ....................
+                """),
+                img("""
+                    ....................
+                                ....................
+                                ....................
+                                ....................
+                                ....................
+                                ....bbbb.....b.c....
+                                ...bbbbbb.....bbb...
+                                ...bddbbb.....bbfb..
+                                ...bdddbbb....bbbbb.
+                                ......ddbbb...bd....
+                                .......ddbb.bbbbb...
+                                ........dbb.bbbd....
+                                .........bbbbddd....
+                                ..........bbbdd.....
+                                ...........bbbb.....
+                                ....................
                 """)],
             200,
             True)
 moving = False
-bearSteak: Sprite = None
-bearIs = 0
-BearHealth = 0
-squirrelIs = 0
+battery: Sprite = None
+firePitIs = 0
+berriesIs = 0
+speaker: Sprite = None
 squirrelHealth = 0
+squirrelExitIs = 0
+squirrelIs = 0
+squirrelExit: Sprite = None
 Berries: Sprite = None
 fillWidth = 0
 timer: Sprite = None
+kiddoIntro: Sprite = None
+daddoIntro: Sprite = None
 Trekking_Pole: Sprite = None
 hungerPercent = 0
 meterWidth = 0
 hungerTitle: Sprite = None
 healthBar: Sprite = None
 hungerBar: Sprite = None
+firePit: Sprite = None
+pockyIs = 0
 Pocky: Sprite = None
+bearSteak: Sprite = None
+bearIs = 0
+BearHealth = 0
 Kiddo: Sprite = None
 Squirrel: Sprite = None
 lastDirection = 0
-healthPercent = 0
 BearSprite: Sprite = None
-berriesIs = 0
-Level1()
+healthPercent = 0
+rewardHUD2: Sprite = None
+rewardHUD1: Sprite = None
+hasReward = 0
+intro()
 spawnHUD()
-berriesIs = 0
 
 def on_on_update():
+    global moving
+    moving = controller.left.is_pressed() or (controller.right.is_pressed() or (controller.up.is_pressed() or controller.down.is_pressed()))
+    if not (moving):
+        animation.stop_animation(animation.AnimationTypes.ALL, Kiddo)
     if lastDirection == 0:
         Trekking_Pole.bottom = Kiddo.top
         Trekking_Pole.x = Kiddo.x
@@ -1359,16 +1789,9 @@ def on_on_update():
         game.over(False, effects.melt)
 game.on_update(on_on_update)
 
-def on_on_update2():
-    global moving
-    moving = controller.left.is_pressed() or (controller.right.is_pressed() or (controller.up.is_pressed() or controller.down.is_pressed()))
-    if not (moving):
-        animation.stop_animation(animation.AnimationTypes.ALL, Kiddo)
-game.on_update(on_on_update2)
-
 def on_update_interval():
     global hungerPercent, healthPercent
-    hungerPercent += -0.75
+    hungerPercent += -1
     drawHUDMeter(hungerPercent, hungerBar, 4, 14)
     drawHUDMeter(healthPercent, healthBar, 3, 2)
     if bearIs == 1:
