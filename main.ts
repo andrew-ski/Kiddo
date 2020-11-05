@@ -7,9 +7,11 @@ namespace SpriteKind {
     export const exit = SpriteKind.create()
     export const fire = SpriteKind.create()
     export const reward = SpriteKind.create()
+    export const bush = SpriteKind.create()
+    export const treatkind = SpriteKind.create()
 }
 function rewardHUD () {
-    if (hasSpeaker == 1) {
+    if (hasReward > 0) {
         rewardHUD1 = sprites.create(img`
             b b b b b b b b b b b b b b b b b c 
             b . . . f f f f f f f . . . . . b c 
@@ -31,11 +33,33 @@ function rewardHUD () {
         initHUDtitle(rewardHUD1)
         rewardHUD1.left = 45
     }
+    if (hasReward > 1) {
+        rewardHUD2 = sprites.create(img`
+            b b b b b b b b b b b b b b b b b c 
+            b d d f f f f f f f f f b . . . b c 
+            b d d f 5 4 4 4 4 4 4 f b . 1 1 b c 
+            b d f 5 4 4 4 4 4 f f d b . 1 1 b c 
+            b d f 5 4 4 4 4 f d d d b . 2 f b c 
+            b f 5 4 4 4 4 f d d d d b . 2 f b c 
+            b f 4 4 4 4 4 f f f d d b . 2 f b c 
+            b f f f f 5 4 4 4 f d d b . 2 f b c 
+            b d d d f 5 4 4 f d d d b . 2 f b c 
+            b d d f 5 4 4 f d d d d b . 2 f b c 
+            b d d f 5 4 f d d d d d b . 2 f b c 
+            b d f 5 4 f d d d d d d b 2 2 f b c 
+            b f 4 4 f d d d d d d d b f f f b c 
+            b f f f d d d d d d d d b . . . b c 
+            b b b b b b b b b b b b b b b b b c 
+            `, SpriteKind.HUD)
+        rewardHUD2.top = scene.screenHeight() - 16
+        initHUDtitle(rewardHUD2)
+        rewardHUD2.left = 63
+    }
 }
 sprites.onOverlap(SpriteKind.bear, SpriteKind.Player, function (sprite, otherSprite) {
     healthPercent += -10
-    BearSprite.say("CHOMP", 500)
-    pause(500)
+    BearSprite.say("CHOMP", 350)
+    pause(350)
 })
 // 0 - up
 // 
@@ -47,6 +71,10 @@ sprites.onOverlap(SpriteKind.bear, SpriteKind.Player, function (sprite, otherSpr
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     lastDirection = 0
     walk()
+})
+scene.onOverlapTile(SpriteKind.Player, myTiles.tile46, function (sprite, location) {
+    game.splash("You go to sleep ", "and dream about batteries")
+    Level1()
 })
 function squirrelPath () {
     Squirrel.follow(Kiddo)
@@ -74,7 +102,7 @@ sprites.onOverlap(SpriteKind.Sword, SpriteKind.bear, function (sprite, otherSpri
             . . f f 3 3 3 3 3 3 3 3 f f . . 
             . . . f f f f f f f f f . . . . 
             . . . . . . . . . . . . . . . . 
-            `, SpriteKind.Food)
+            `, SpriteKind.treatkind)
         bearSteak.setPosition(Kiddo.x + 0, Kiddo.y + 0)
     }
     pause(750)
@@ -97,7 +125,7 @@ function spawnPocky () {
         2 2 1 f f f f 2 2 
         2 f f 2 f f f 2 2 
         f f 2 2 f 2 f f 2 
-        `, SpriteKind.Food)
+        `, SpriteKind.treatkind)
     pockyIs = 1
     for (let value of tiles.getTilesByType(myTiles.tile3)) {
         tiles.placeOnTile(Pocky, value)
@@ -196,9 +224,9 @@ function spawnFire () {
     200,
     true
     )
-    for (let value of tiles.getTilesByType(myTiles.tile43)) {
-        tiles.placeOnTile(firePit, value)
-        tiles.setTileAt(value, myTiles.transparency16)
+    for (let value2 of tiles.getTilesByType(myTiles.tile43)) {
+        tiles.placeOnTile(firePit, value2)
+        tiles.setTileAt(value2, myTiles.transparency16)
     }
 }
 function initHUDtitle (hudSprite: Sprite) {
@@ -207,12 +235,8 @@ function initHUDtitle (hudSprite: Sprite) {
     hudSprite.left = 0
 }
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile42, function (sprite, location) {
-    game.splash("You found a speaker!")
-    game.splash("You found a speaker?")
     game.splash("You go to sleep ", "and dream about speakers")
-    hasSpeaker += 1
     Level2()
-    rewardHUD()
 })
 function spawnHUD () {
     hungerBar = sprites.create(img`
@@ -278,14 +302,11 @@ function spawnHUD () {
     healthPercent = 100
 }
 function Level2 () {
-    destroySprites()
-    scene.setBackgroundColor(7)
-    tiles.setTilemap(tilemap`level_0`)
-    spawnRandGrass()
-    spawnKiddo()
-    spawnPocky()
-    tiles.placeOnTile(Kiddo, tiles.getTileLocation(0, 1))
-    berriesIs = 0
+    Kiddo.destroy()
+    tiles.setTilemap(tilemap`level_1`)
+    startLevel()
+    spawnFire()
+    spawnBattery()
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (lastDirection == 0) {
@@ -929,14 +950,45 @@ function createTimer (ms: number) {
     timer.setFlag(SpriteFlag.Ghost, true)
     timer.lifespan = ms
 }
+function level3 () {
+    tiles.setTilemap(tiles.createTilemap(hex`28002000010703030303030303030303030303030303030303030303030303030303030303030303030303030104010101010101010101010101010101010101010101010101010101010101010101010101010101040101010101010101010101010101010101010101010101010101010101010101010101010101010401010101010101010101010101010101010101010101010101010101010101010101010101010104010101010101010101010101010101010101010101010101010101010101010101010101010101040101010101010101010101010101010101010101010101010101010101010101010101010101010401010101010101010101010101010101010101010101010101010101010101010101010101010104010101010101010101010101010101010101010101010101010101010101010101010101010101040101010101010101010101010101010101010101010101010101010101010101010101010101010401010101010101010101070303030303030305010101010101010101010101010101010101010104010101010101030303030301010101010101040101010101010101010101010101010101010101040101010101010101010101010101010101010401010101010101010101010101010101010101010401010101010101010101010101010101010104010101010101010101010101010101010101010104010101010101010101010101010101010101040101010101010101010101010303030303030501040101010101010101010101010101010101010401010101010101010101010101010101010104010401010101010101010101010101010101010104010101010101010101010101010101010101040104010101010101010101010101010101010101040101010101010101010101010101010101010401040101010101010101010101010101010101010401010101010101010101010101010101010104010401010101010101010101010101010101010104010101010101010101010101010101010101040104010101010101010101010101010101010101040101010101010101010101010101010101010401040101010101010101010101010101010101010401010101010101010101010101010101010104010401010101010101010101010101010101010104010101010101010101010101010101010101040106030303030303030303030303030303030303040303030303030303030303010101010101010401010101010101010101010101010101010101010401010101010101010101030101010101010104010101010101010101010101010101010101010104010101010101010101010301010101010101040303050101010101010101010101010101010101040101010101010101010103010101010101010401020401010101010101010101010101010101010401010101010101010101030101010101010104010104010d01010101010101010101010101010104010101010101010101010301010101010101040101060e0303030303030303030303030303030308010101010101010101010301010101010101040c0c0c0c0b01010101010101010101010101010101010101010101010101010301010101010101040a0a0a0a0a010101010101010101010101010101010101010101010101010103010101010101010409090909090101010101010101010101010101010101010101010101010101060303030303030308`, img`
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        ........................................
+        22222...................................
+        ....2...................................
+        22222...................................
+        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile3,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile31,myTiles.tile34,myTiles.tile36,myTiles.tile43,myTiles.tile48], TileScale.Sixteen))
+}
 function Level1 () {
-    scene.setBackgroundColor(7)
     tiles.setTilemap(tilemap`level_0`)
-    spawnRandGrass()
-    spawnKiddo()
-    spawnPocky()
-    tiles.placeOnTile(Kiddo, tiles.getTileLocation(0, 1))
-    berriesIs = 0
+    startLevel()
 }
 function drawHUDMeter (percent: number, hudSprite: Sprite, onColor: number, offColor: number) {
     hudSprite.image.fill(offColor)
@@ -955,21 +1007,21 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile26, function (sprite, locatio
     Level11()
 })
 function spawnRandGrass () {
-    for (let value2 of tiles.getTilesByType(myTiles.tile1)) {
+    for (let value22 of tiles.getTilesByType(myTiles.tile1)) {
         if (randint(1, 3) == 1) {
-            tiles.setTileAt(value2, myTiles.tile9)
+            tiles.setTileAt(value22, myTiles.tile9)
         } else if (randint(1, 2) == 1) {
-            tiles.setTileAt(value2, myTiles.tile7)
+            tiles.setTileAt(value22, myTiles.tile7)
         } else if (randint(1, 2) == 1) {
-            tiles.setTileAt(value2, myTiles.tile4)
+            tiles.setTileAt(value22, myTiles.tile4)
         } else if (randint(1, 6) == 1) {
-            tiles.setTileAt(value2, myTiles.tile5)
+            tiles.setTileAt(value22, myTiles.tile5)
         } else if (randint(1, 6) == 1) {
-            tiles.setTileAt(value2, myTiles.tile6)
+            tiles.setTileAt(value22, myTiles.tile6)
         } else if (randint(1, 6) == 1) {
-            tiles.setTileAt(value2, myTiles.tile40)
+            tiles.setTileAt(value22, myTiles.tile40)
         } else {
-            tiles.setTileAt(value2, myTiles.tile8)
+            tiles.setTileAt(value22, myTiles.tile8)
         }
     }
 }
@@ -1023,49 +1075,11 @@ function spawnSquirrel () {
     squirrelIs = 1
 }
 function Level11 () {
-    destroySprites()
-    scene.setBackgroundColor(7)
-    tiles.setTilemap(tiles.createTilemap(hex`20002000030303030303030303030303030303050701010101010101010101010101010107010101010101010101010101010104010101010101010101010101010101010101080303030303030303030303030b030303030303030303030303050101010101040c141414141414141414141414141414141414141414141201040101010101040d131313131313131313131313131313131313131313131101040101010101040d131313131313131313131313131313131313131313131101040101010101040d131313131313131313131313131313131313131313131107040101010101040d131313131313131313131313131313131313131313131101040101010101040d131313131313131313131313131313131313131313131101040101010101040d131313131313131313131313131313131313131313131101040101010101040e0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f100104010101010104010a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a01010401010101010603030303030303050c141201010101070101010101010101010401010101010107010101010101040d131101010101010101010107010101010401010101010101010101010101040d131101010101010101010101010101010401010101010101010101010101040d131102030303030303030303030303030901010101010101010101010101040d131514141414141414141414141414141414141201010101010101070101040d131313131313131313131313131313131313131101010101010101010101040d13131313131313131313131313131313170f0f1001070101010101010101040d13131313131313131313131313131313110a0a0101010101010101010101040d131313131313131313131313131313131101180101010108030303030303090d131313131313131313170f0f0f0f0f0f10010119010101040c14141414141416131313131313131313110a0a0a0a0a0a01010101010101040d131313131313131313131313131313131108030303030303030303010101040d1313131313131313131313131313131311040c1414141414141412070101040d1313131313131313131313131313131311040d1313131313131311010101040e0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f10040d131313131313131101010104010a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a01040d131313131313131101070104010101010101010101010101010101010101040e0f0f0f0f0f0f0f100101010401010101010101010101010101010101010104010a0a0a0a0a0a0a0101010106030303030303030303030303030303030303090101010101010101010101010101010101010101010101010101010101010101010101010101010101`, img`
-        ................2...............
-        2...............................
-        ................................
-        ...222222222222222222222222.....
-        ...2......................2.....
-        ...2......................2.....
-        ...2......................2.....
-        ...2......................2.....
-        ...2......................2.....
-        ...2......................2.....
-        ...2......................2.....
-        ....2222222222222222222222......
-        ...........222....2.............
-        ...2.......2.2.........2........
-        ...........2.2..................
-        ...........2.2..................
-        ...........2.2222222222222222222
-        .......2...2....................
-        ...........2...................2
-        .2.........2................222.
-        ...........2................2...
-        ...........2..........2222222...
-        ....22222222.........2222222....
-        ....2................2..........
-        ....2................2.222222222
-        2...2................2.2.......2
-        ....2................2.2.......2
-        .....2222222222222222..2.......2
-        .2.....................2.......2
-        ........................2222222.
-        ................................
-        ................................
-        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile3,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile17,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile25,myTiles.tile28,myTiles.tile29,myTiles.tile30,myTiles.tile31,myTiles.tile32,myTiles.tile33,myTiles.tile34,myTiles.tile35,myTiles.tile36,myTiles.tile37,myTiles.tile38,myTiles.tile39,myTiles.tile42,myTiles.tile43], TileScale.Sixteen))
-    spawnRandGrass()
-    spawnKiddo()
-    spawnPocky()
-    spawnFire()
+    Kiddo.destroy()
+    tiles.setTilemap(tilemap`level_2`)
+    startLevel()
     spawnSpeaker()
-    tiles.placeOnTile(Kiddo, tiles.getTileLocation(0, 0))
-    berriesIs = 0
+    spawnFire()
 }
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     lastDirection = 2
@@ -1097,14 +1111,15 @@ function spawnSpeaker () {
         .fffcccccccfff.....
         ...fffffffff.......
         `, SpriteKind.reward)
-    for (let value of tiles.getTilesByType(myTiles.tile42)) {
-        tiles.placeOnTile(speaker, value)
+    for (let value3 of tiles.getTilesByType(myTiles.tile41)) {
+        tiles.placeOnTile(speaker, value3)
+        tiles.setTileAt(value3, myTiles.tile11)
     }
 }
 scene.onHitWall(SpriteKind.Sword, function (sprite, location) {
     if (controller.A.isPressed()) {
-        for (let value3 of [CollisionDirection.Left, CollisionDirection.Right, CollisionDirection.Top, CollisionDirection.Bottom]) {
-            if (tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(Trekking_Pole), value3), myTiles.tile17)) {
+        for (let value32 of [CollisionDirection.Left, CollisionDirection.Right, CollisionDirection.Top, CollisionDirection.Bottom]) {
+            if (tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(Trekking_Pole), value32), myTiles.tile17)) {
                 tiles.setWallAt(location, false)
                 if (randint(0, 1) == 0) {
                     Berries = sprites.create(img`
@@ -1159,9 +1174,16 @@ scene.onHitWall(SpriteKind.Sword, function (sprite, location) {
         }
     }
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.reward, function (sprite, otherSprite) {
+    game.splash("You found some trash!")
+    game.splash("You love trash!")
+    otherSprite.destroy()
+    hasReward += 1
+    rewardHUD()
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     hungerPercent += 10
-    if (hungerPercent > 100) {
+    if (hungerPercent >= 100) {
         hungerPercent = 100
         healthPercent += 20
     }
@@ -1173,6 +1195,14 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
             squirrelPath()
         }
     }
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.treatkind, function (sprite, otherSprite) {
+    hungerPercent += 20
+    if (hungerPercent > 100) {
+        hungerPercent = 100
+        healthPercent += 40
+    }
+    otherSprite.destroy(effects.disintegrate, 200)
 })
 function spawnBear () {
     BearSprite = sprites.create(img`
@@ -1381,13 +1411,15 @@ sprites.onOverlap(SpriteKind.squirrel, SpriteKind.exit, function (sprite, otherS
     squirrelIs = 0
 })
 function destroySprites () {
-    for (let value of sprites.allOfKind(SpriteKind.exit)) {
+    for (let value of sprites.allOfKind(SpriteKind.reward)) {
         value.destroy()
     }
-    for (let value of sprites.allOfKind(SpriteKind.fire)) {
-        value.destroy()
+    for (let value4 of sprites.allOfKind(SpriteKind.exit)) {
+        value4.destroy()
     }
-    Kiddo.destroy()
+    for (let value5 of sprites.allOfKind(SpriteKind.fire)) {
+        value5.destroy()
+    }
     if (berriesIs > 0) {
         berriesIs = 0
         Berries.destroy()
@@ -1413,14 +1445,50 @@ function destroySprites () {
         firePit.destroy()
     }
 }
+function startLevel () {
+    destroySprites()
+    scene.setBackgroundColor(7)
+    spawnRandGrass()
+    spawnPocky()
+    spawnKiddo()
+    berriesIs = 0
+    tiles.placeOnRandomTile(Kiddo, myTiles.tile48)
+    for (let value6 of tiles.getTilesByType(myTiles.tile48)) {
+        tiles.setTileAt(value6, myTiles.tile10)
+    }
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.squirrel, function (sprite, otherSprite) {
     healthPercent += -5
-    pause(750)
+    pause(250)
 })
 sprites.onDestroyed(SpriteKind.Timer, function (sprite) {
     animation.stopAnimation(animation.AnimationTypes.All, Kiddo)
     walk()
 })
+function spawnBattery () {
+    battery = sprites.create(img`
+        ddddffffffffddb....
+        ddddf544444fddb.11.
+        dddf544444fdddb1111
+        dddf54444fddddb1111
+        ddf54444fdddddb.2f.
+        ddf5444ffffdddb.2f.
+        df44444444fdddb.2f.
+        dffff5444fddddb.2f.
+        ddddf544fdddddb.2f.
+        dddf544fddddddb.2f.
+        dddf44fdddddddb.2f.
+        ddf54fddddddddb.2f.
+        ddf4fdddddddddb22f.
+        df4fddddddddddbfff.
+        dffdddddddddddb....
+        44444444444444c....
+        `, SpriteKind.reward)
+    for (let value of tiles.getTilesByType(myTiles.tile47)) {
+        tiles.placeOnTile(battery, value)
+        tiles.setTileAt(value, myTiles.tile11)
+    }
+}
 function spawnKiddo () {
     Kiddo = sprites.create(img`
         . . . . 6 6 6 6 6 6 6 . . . . . 
@@ -1583,7 +1651,9 @@ function squirrelAnimate () {
     }
 }
 let moving = false
+let battery: Sprite = null
 let firePitIs = 0
+let berriesIs = 0
 let speaker: Sprite = null
 let squirrelHealth = 0
 let squirrelExitIs = 0
@@ -1595,7 +1665,6 @@ let timer: Sprite = null
 let kiddoIntro: Sprite = null
 let daddoIntro: Sprite = null
 let Trekking_Pole: Sprite = null
-let berriesIs = 0
 let hungerPercent = 0
 let meterWidth = 0
 let hungerTitle: Sprite = null
@@ -1612,8 +1681,9 @@ let Squirrel: Sprite = null
 let lastDirection = 0
 let BearSprite: Sprite = null
 let healthPercent = 0
+let rewardHUD2: Sprite = null
 let rewardHUD1: Sprite = null
-let hasSpeaker = 0
+let hasReward = 0
 intro()
 spawnHUD()
 game.onUpdate(function () {
@@ -1650,7 +1720,7 @@ game.onUpdate(function () {
     }
 })
 game.onUpdateInterval(500, function () {
-    hungerPercent += -0.75
+    hungerPercent += -1
     drawHUDMeter(hungerPercent, hungerBar, 4, 14)
     drawHUDMeter(healthPercent, healthBar, 3, 2)
     if (bearIs == 1) {
