@@ -10,6 +10,7 @@ namespace SpriteKind {
     export const bush = SpriteKind.create()
     export const treatkind = SpriteKind.create()
     export const Wolf = SpriteKind.create()
+    export const PyBadge = SpriteKind.create()
 }
 function rewardHUD () {
     if (hasReward > 0) {
@@ -56,6 +57,30 @@ function rewardHUD () {
         initHUDtitle(rewardHUD2)
         rewardHUD2.left = 63
     }
+    if (WolfyIs == 1) {
+        WolfHPHUD = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.HUD)
+        WolfHPHUD.top = scene.screenHeight() - 110
+        initHUDtitle(WolfHPHUD)
+        WolfHPHUD.left = 10
+        WolfHPHUD.setImage(image.create(scene.screenWidth() - 20, 8))
+    }
 }
 sprites.onOverlap(SpriteKind.bear, SpriteKind.Player, function (sprite, otherSprite) {
     healthPercent += -10
@@ -75,6 +100,15 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile46, function (sprite, location) {
     game.splash("You go to sleep ", "and dream about batteries")
+    game.splash("You wake-up", "feeling refreshed!")
+    hungerPercent += 40
+    healthPercent += 40
+    if (hungerPercent >= 100) {
+        hungerPercent = 100
+    }
+    if (healthPercent >= 100) {
+        healthPercent = 100
+    }
     level3()
 })
 function squirrelPath () {
@@ -83,8 +117,6 @@ function squirrelPath () {
 sprites.onOverlap(SpriteKind.Sword, SpriteKind.bear, function (sprite, otherSprite) {
     if (BearHealth > 1) {
         BearHealth += -1
-        game.setDialogTextColor(15)
-        BearSprite.say("-1")
     } else if (BearHealth == 1) {
         BearSprite.destroy()
         bearIs = 0
@@ -112,8 +144,6 @@ sprites.onOverlap(SpriteKind.Sword, SpriteKind.bear, function (sprite, otherSpri
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Wolf, function (sprite, otherSprite) {
     healthPercent += -10
-    game.setDialogTextColor(2)
-    Kiddo.say("-10")
     pause(100)
 })
 function spawnPocky () {
@@ -142,11 +172,35 @@ function spawnPocky () {
 }
 sprites.onOverlap(SpriteKind.Sword, SpriteKind.Wolf, function (sprite, otherSprite) {
     if (WolfyHealth > 1) {
-        WolfyHealth += -1
-        game.setDialogTextColor(15)
-        Wolfy.say("-1")
+        WolfyHealth += -10
     } else {
         Wolfy.destroy(effects.disintegrate, 500)
+        WolfHPHUD.destroy()
+        PyBadge = sprites.create(img`
+            8888bbf888888888881111181888bbf88
+            888888888888888881111181888888888
+            8888888ffffffffffffffffffffb88888
+            8888888fffffffffffffffffffff88888
+            88bbf88ffffffffffffffffffff488888
+            88bbf88ffffffffffffffffffff488bbf
+            bbf8bbfffffffffffffffffffff488bbf
+            bbf8bbfffffffffffffffffffff4bbf88
+            88bbf88ffffffffffffffffffff4bbf88
+            88bbf88ffffffffffffffffffff488888
+            8888888ffffffffffffffffffff488888
+            8888888ffffffffffffffffffff488888
+            8888881ffffffffffffffffffff488888
+            8888811ffffffffffffffffffff488888
+            8888111fffffffffffffffffffff11888
+            8881111ffffffffffffffffffffb11888
+            8811111bbbbbbbbbbbbbbbbbbbbb81888
+            811111818888888888888888888881188
+            811118188818818818818818888118818
+            811181888888888888888888888111188
+            `, SpriteKind.PyBadge)
+        PyBadge.z = 3
+        PyBadge.setPosition(Kiddo.x + 0, Kiddo.y - 100)
+        PyBadge.follow(Kiddo, 10)
     }
     pause(200)
 })
@@ -255,6 +309,15 @@ function initHUDtitle (hudSprite: Sprite) {
 }
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile42, function (sprite, location) {
     game.splash("You go to sleep ", "and dream about speakers")
+    game.splash("You wake-up", "feeling refreshed!")
+    hungerPercent += 40
+    healthPercent += 40
+    if (hungerPercent >= 100) {
+        hungerPercent = 100
+    }
+    if (healthPercent >= 100) {
+        healthPercent = 100
+    }
     Level2()
 })
 function spawnHUD () {
@@ -1041,8 +1104,9 @@ function Level5 () {
         `, [myTiles.transparency16,myTiles.tile1,myTiles.tile10,myTiles.tile48], TileScale.Sixteen))
     startLevel()
     spawnWolf()
-    WolfyHealth = 6
+    WolfyHealth = 100
     WolfyIs = 1
+    rewardHUD()
 }
 function drawHUDMeter (percent: number, hudSprite: Sprite, onColor: number, offColor: number) {
     hudSprite.image.fill(offColor)
@@ -1144,6 +1208,14 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     lastDirection = 2
     walk()
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.PyBadge, function (sprite, otherSprite) {
+    game.over(true, effects.clouds)
+})
+function drawHUDMeter2 (percent: number, hudSprite: Sprite, onColor: number, offColor: number) {
+    hudSprite.image.fill(offColor)
+    fillWidth = percent * (scene.screenWidth() - 20) / 100
+    hudSprite.image.fillRect(0, 0, fillWidth, hudSprite.height, onColor)
+}
 scene.onHitWall(SpriteKind.squirrel, function (sprite, location) {
     Squirrel.destroy()
     squirrelExit.destroy()
@@ -1245,6 +1317,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     if (hungerPercent >= 100) {
         hungerPercent = 100
         healthPercent += 20
+        if (healthPercent >= 100) {
+            healthPercent = 100
+        }
     }
     otherSprite.destroy(effects.disintegrate, 200)
     pause(200)
@@ -1295,6 +1370,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.treatkind, function (sprite, oth
     if (hungerPercent > 100) {
         hungerPercent = 100
         healthPercent += 40
+        if (healthPercent >= 100) {
+            healthPercent = 100
+        }
     }
     otherSprite.destroy(effects.disintegrate, 200)
 })
@@ -1500,6 +1578,15 @@ function bearAnimate () {
 }
 scene.onOverlapTile(SpriteKind.Player, myTiles.tile52, function (sprite, location) {
     game.splash("You go to sleep ", "and dream about howling...")
+    game.splash("You wake-up", "feeling refreshed!")
+    hungerPercent += 40
+    healthPercent += 40
+    if (hungerPercent >= 100) {
+        hungerPercent = 100
+    }
+    if (healthPercent >= 100) {
+        healthPercent = 100
+    }
     Level5()
 })
 sprites.onOverlap(SpriteKind.squirrel, SpriteKind.exit, function (sprite, otherSprite) {
@@ -1661,10 +1748,10 @@ function spawnWolf () {
         e 7 e e 7 e e e e 7 e e e e 7 e 
         7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
         `, SpriteKind.exit)
-    WolfSpawn1.setPosition(Kiddo.x + 0, Kiddo.y + 64)
-    WolfSpawn2.setPosition(Kiddo.x + 64, Kiddo.y + 0)
-    WolfSpawn3.setPosition(Kiddo.x + 0, Kiddo.y - 64)
-    WolfSpawn4.setPosition(Kiddo.x - 64, Kiddo.y - 0)
+    WolfSpawn1.setPosition(Kiddo.x + 0, Kiddo.y + 72)
+    WolfSpawn2.setPosition(Kiddo.x + 72, Kiddo.y + 0)
+    WolfSpawn3.setPosition(Kiddo.x + 0, Kiddo.y - 72)
+    WolfSpawn4.setPosition(Kiddo.x - 72, Kiddo.y - 0)
     WolfSpawn1.z = 1
     WolfSpawn2.z = 1
     WolfSpawn3.z = 1
@@ -1697,7 +1784,7 @@ function spawnWolf () {
         `, SpriteKind.Wolf)
     Wolfy.z = 2
     Wolfy.setPosition(WolfSpawn1.x - 0, WolfSpawn1.y - 0)
-    Wolfy.follow(WolfSpawn2, 70)
+    Wolfy.follow(WolfSpawn2, 80)
 }
 function spawnKiddo () {
     Kiddo = sprites.create(img`
@@ -1876,17 +1963,16 @@ let squirrelIs = 0
 let squirrelExit: Sprite = null
 let Berries: Sprite = null
 let fillWidth = 0
-let WolfyIs = 0
 let timer: Sprite = null
 let kiddoIntro: Sprite = null
 let daddoIntro: Sprite = null
 let Trekking_Pole: Sprite = null
-let hungerPercent = 0
 let meterWidth = 0
 let hungerTitle: Sprite = null
 let healthBar: Sprite = null
 let hungerBar: Sprite = null
 let firePit: Sprite = null
+let PyBadge: Sprite = null
 let Wolfy: Sprite = null
 let WolfyHealth = 0
 let pockyIs = 0
@@ -1896,9 +1982,12 @@ let bearIs = 0
 let BearHealth = 0
 let Kiddo: Sprite = null
 let Squirrel: Sprite = null
+let hungerPercent = 0
 let lastDirection = 0
 let BearSprite: Sprite = null
 let healthPercent = 0
+let WolfHPHUD: Sprite = null
+let WolfyIs = 0
 let rewardHUD2: Sprite = null
 let rewardHUD1: Sprite = null
 let hasReward = 0
@@ -1927,15 +2016,15 @@ game.onUpdate(function () {
     if (hungerPercent == 50) {
         Kiddo.say("Can I have a snack?", 1000)
     } else if (hungerPercent == 30) {
-        Kiddo.say("I literally didn't eat anything today", 2000)
+        Kiddo.say("HUNGER!", 1000)
     } else if (hungerPercent == 15) {
         Kiddo.say("I'M DYING...", 1000)
     }
     if (healthPercent == 50) {
-        Kiddo.say("I'm bleeding!", 1000)
+        Kiddo.say("Ouch!", 1000)
     } else if (healthPercent == 25) {
-        Kiddo.say("Tell the cats I love them!", 2000)
-    } else if (healthPercent == 0) {
+        Kiddo.say("Double-Ouch!", 2000)
+    } else if (healthPercent < 1) {
         game.over(false, effects.melt)
     }
 })
@@ -1951,5 +2040,8 @@ game.onUpdateInterval(500, function () {
     }
     if (hungerPercent <= 0) {
         healthPercent += -5
+    }
+    if (WolfyIs == 1) {
+        drawHUDMeter2(WolfyHealth, WolfHPHUD, 11, 15)
     }
 })
