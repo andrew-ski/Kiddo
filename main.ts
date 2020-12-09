@@ -11,6 +11,7 @@ namespace SpriteKind {
     export const treatkind = SpriteKind.create()
     export const Wolf = SpriteKind.create()
     export const PyBadge = SpriteKind.create()
+    export const Music = SpriteKind.create()
 }
 function rewardHUD () {
     if (hasSpeaker == 1) {
@@ -1596,6 +1597,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 
             b . . . . . . . . . . . . . . 
             . f . . . . . . . . . . . . . 
             . . f . . . . . . . . . . . . 
@@ -1604,8 +1606,9 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . e . . . . . . . . . . 
             . . . . e . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
             `,img`
+            . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . b . . . . . . . 
             . . . . 1 1 . b . . . . . . . 
@@ -1618,8 +1621,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . f . . . . . . . 
             . . . . . . . e . . . . . . . 
             . . . . . . . e . . . . . . . 
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             `,img`
@@ -1664,13 +1665,13 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         animation.runImageAnimation(
         Trekking_Pole,
         [img`
-            . . . . . . . . b . . . . . . 
-            . . . . . . . f . . . . . . . 
+            . . . . . . . b . . . . . . . 
             . . . . . . f . . . . . . . . 
             . . . . . f . . . . . . . . . 
             . . . . f . . . . . . . . . . 
-            . . . e . . . . . . . . . . . 
+            . . . f . . . . . . . . . . . 
             . . e . . . . . . . . . . . . 
+            . e . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
@@ -1683,12 +1684,12 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             `,img`
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . 1 . . . 
+            . . . . . . . . . 1 . . . . . 
             . . . . . . . . . . . . . . . 
-            . . . . . . . . 1 . . 1 . . . 
-            . . . . . . . . 1 . . . . . . 
-            . . . . . . . . . f f f f b . 
-            . . . . e e f f f . . . . . . 
+            . . . . . . 1 . . 1 . . . . . 
+            . . . . . . 1 . . . . . . . . 
+            . . . . . . . f f f f b . . . 
+            . . e e f f f . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
@@ -1739,9 +1740,6 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         animation.runImageAnimation(
         Trekking_Pole,
         [img`
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
             . . . . e . . . . . . . . . . 
             . . . . e . . . . . . . . . . 
             . . . f . . . . . . . . . . . 
@@ -1755,12 +1753,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 
             `,img`
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . 
             . . . . . . . e . . . . . . . 
             . . . . . . . e . . . . . . . 
             . . . . 1 1 . f . . . . . . . 
@@ -1772,8 +1768,12 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . f . . . . . . . 
             . . . 1 1 1 . f . . . . . . . 
             . . . . . . . b . . . . . . . 
-            `,img`
             . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . 
+            `,img`
             . . . . . . . . e . . . . . . 
             . . . . . . . . . e . . . . . 
             . . . . . . . . . . f . . . . 
@@ -1785,6 +1785,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . . . 1 . . 
             . . . . . . . . . . 1 1 . . . 
             . . . . . . . . . . 1 . . . . 
+            . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
@@ -1815,11 +1816,11 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         Trekking_Pole,
         [img`
             . . . . . . . . . . . . . . . 
-            . . . b . . . . . . . . . . . 
-            . . . . f f . . . . . . . . . 
+            . . . . . b . . . . . . . . . 
             . . . . . . f f . . . . . . . 
             . . . . . . . . f f . . . . . 
-            . . . . . . . . . . e . . . . 
+            . . . . . . . . . . f f . . . 
+            . . . . . . . . . . . . e . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
@@ -1834,12 +1835,12 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
-            . 1 . . . . . . . . . . . . . 
-            . 1 . . . 1 . . . . . . . . . 
-            . 1 . . . 1 . . . . . . . . . 
+            . . . . . 1 . . . . . . . . . 
+            . . . . . 1 . . . 1 . . . . . 
+            . . . . . 1 . . . 1 . . . . . 
             . . . . . . . . . . . . . . . 
-            b f f f f . . . . . . . . . . 
-            . . . . . f f e e . . . . . . 
+            . . . . b f f f f . . . . . . 
+            . . . . . . . . . f f e e . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
@@ -2004,9 +2005,9 @@ function walk () {
             . . . 6 6 6 6 6 6 6 6 6 6 . . . 
             . . . 6 6 6 6 6 6 6 6 6 6 . . . 
             . . . 6 6 6 6 6 6 e 6 6 6 . . . 
-            . . . 6 6 6 6 9 9 e 6 6 6 . . . 
-            . . . 6 6 6 9 9 9 f 6 6 6 . . . 
-            . . . . 6 6 9 9 9 f 6 6 . . . . 
+            . . . . 6 6 6 9 9 e 6 6 . . . . 
+            . . . . . 6 9 9 9 f 6 . . . . . 
+            . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . d . 9 9 b . . . . . . 
@@ -2021,9 +2022,9 @@ function walk () {
             . . . 6 6 6 6 6 6 6 6 6 6 . . . 
             . . . 6 6 6 6 6 6 6 6 6 6 . . . 
             . . . 6 6 6 6 6 6 e 6 6 6 . . . 
-            . . . 6 6 6 6 9 9 e 6 6 6 . . . 
-            . . . 6 6 6 9 9 9 f 6 6 6 . . . 
-            . . . . 6 6 9 9 9 f 6 6 . . . . 
+            . . . . 6 6 6 9 9 e 6 6 . . . . 
+            . . . . . 6 9 9 9 f 6 . . . . . 
+            . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . . d 9 9 b d . . . . . 
@@ -2038,9 +2039,9 @@ function walk () {
             . . . 6 6 6 6 6 6 6 6 6 6 . . . 
             . . . 6 6 6 6 6 6 6 6 6 6 . . . 
             . . . 6 6 6 6 6 6 e 6 6 6 . . . 
-            . . . 6 6 6 6 9 9 e 6 6 6 . . . 
-            . . . 6 6 6 9 9 9 f 6 6 6 . . . 
-            . . . . 6 6 9 9 9 f 6 6 . . . . 
+            . . . . 6 6 6 9 9 e 6 6 . . . . 
+            . . . . . 6 9 9 9 f 6 . . . . . 
+            . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . . . 9 9 b d . . . . . 
@@ -2055,9 +2056,9 @@ function walk () {
             . . . 6 6 6 6 6 6 6 6 6 6 . . . 
             . . . 6 6 6 6 6 6 6 6 6 6 . . . 
             . . . 6 6 6 6 6 6 e 6 6 6 . . . 
-            . . . 6 6 6 6 9 9 e 6 6 6 . . . 
-            . . . 6 6 6 9 9 9 f 6 6 6 . . . 
-            . . . . 6 6 9 9 9 f 6 6 . . . . 
+            . . . . 6 6 6 9 9 e 6 6 . . . . 
+            . . . . . 6 9 9 9 f 6 . . . . . 
+            . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . 6 9 9 9 f 6 . . . . . 
             . . . . . . d 9 9 b . . . . . . 
@@ -2401,6 +2402,7 @@ function Level1 () {
     CurrentLevel = 0
     tiles.setTilemap(tilemap`level_0`)
     startLevel()
+    MusicFun()
 }
 function Level5 () {
     CurrentLevel = 5
@@ -2505,6 +2507,10 @@ function spawnSquirrel () {
     squirrelHealth = 1
     squirrelIs = 1
 }
+sprites.onOverlap(SpriteKind.Sword, SpriteKind.Music, function (sprite, otherSprite) {
+    Music = true
+    otherSprite.destroy()
+})
 sprites.onOverlap(SpriteKind.Wolf, SpriteKind.exit2, function (sprite, otherSprite) {
     randSpawn = randint(1, 4)
     if (randSpawn == 1) {
@@ -2633,11 +2639,11 @@ function bearAnimate () {
             ...................ff...fff.......
             ..................ffff..ffff......
             ..................ffffffffff......
-            .......fffffffff..fffffefffeff....
-            ....fffffffffffffffffff4fff4ff....
+            .......fffffffff..fffffcfffcff....
+            ....fffffffffffffffffffbfffbff....
             ...fffffffffffffffffffffffddddff..
             .fffffffffffffffffffffffffdddddf..
-            ffffffffffffffffffffffffffddddd.3.
+            ffffffffffffffffffffffffffddddd...
             ffffffffffffffffffffffffffddddd...
             .ffffffffffffffffffffffffffddd....
             .fffffffffffffffffffffffffff......
@@ -2661,8 +2667,8 @@ function bearAnimate () {
             ....................ff...fff......
             ...................ffff..ffff.....
             .......fffffffff...ffffffffff.....
-            ....ffffffffffffffffffffefffeff...
-            ...fffffffffffffffffffff4fff4ff...
+            ....ffffffffffffffffffffcfffcff...
+            ...fffffffffffffffffffffbfffbff...
             ..fffffffffffffffffffffffffddddff.
             fffffffffffffffffffffffffffdddddf.
             fffffffffffffffffffffffffffddddd..
@@ -2689,8 +2695,8 @@ function bearAnimate () {
             .....................ff...fff.....
             .......ffffffffff...ffff..ffff....
             ....ffffffffffffffffffffffffff....
-            ...ffffffffffffffffffffffefffeff..
-            .ffffffffffffffffffffffff4fff4ff..
+            ...ffffffffffffffffffffffcfffcff..
+            .ffffffffffffffffffffffffbfffbff..
             ffffffffffffffffffffffffffffddddff
             ffffffffffffffffffffffffffffdddddf
             .fffffffffffffffffffffffffffddddd.
@@ -2715,8 +2721,8 @@ function bearAnimate () {
             ....................ff...fff......
             ...................ffff..ffff.....
             .......fffffffff...ffffffffff.....
-            ....ffffffffffffffffffffefffeff...
-            ...fffffffffffffffffffff4fff4ff...
+            ....ffffffffffffffffffffcfffcff...
+            ...fffffffffffffffffffffbfffbff...
             ..fffffffffffffffffffffffffddddff.
             fffffffffffffffffffffffffffdddddf.
             fffffffffffffffffffffffffffddddd..
@@ -2748,8 +2754,8 @@ function bearAnimate () {
             .......fff...ff...................
             ......ffff..ffff..................
             ......ffffffffff..................
-            ....ffefffefffff..fffffffff.......
-            ....ff4fff4fffffffffffffffffff....
+            ....ffcfffcfffff..fffffffff.......
+            ....ffbfffbfffffffffffffffffff....
             ..ffddddfffffffffffffffffffffff...
             ..fdddddfffffffffffffffffffffffff.
             ...dddddffffffffffffffffffffffffff
@@ -2776,8 +2782,8 @@ function bearAnimate () {
             ......fff...ff....................
             .....ffff..ffff...................
             .....ffffffffff...fffffffff.......
-            ...ffefffeffffffffffffffffffff....
-            ...ff4fff4fffffffffffffffffffff...
+            ...ffcfffcffffffffffffffffffff....
+            ...ffbfffbfffffffffffffffffffff...
             .ffddddfffffffffffffffffffffffff..
             .fdddddfffffffffffffffffffffffffff
             ..dddddfffffffffffffffffffffffffff
@@ -2804,8 +2810,8 @@ function bearAnimate () {
             .....fff...ff.....................
             ....ffff..ffff...ffffffffff.......
             ....ffffffffffffffffffffffffff....
-            ..ffefffeffffffffffffffffffffff...
-            ..ff4fff4ffffffffffffffffffffffff.
+            ..ffcfffcffffffffffffffffffffff...
+            ..ffbfffbffffffffffffffffffffffff.
             ffddddffffffffffffffffffffffffffff
             fdddddffffffffffffffffffffffffffff
             .dddddfffffffffffffffffffffffffff.
@@ -2830,8 +2836,8 @@ function bearAnimate () {
             ......fff...ff....................
             .....ffff..ffff...................
             .....ffffffffff...fffffffff.......
-            ...ffefffeffffffffffffffffffff....
-            ...ff4fff4fffffffffffffffffffff...
+            ...ffcfffcffffffffffffffffffff....
+            ...ffbfffbfffffffffffffffffffff...
             .ffddddfffffffffffffffffffffffff..
             .fdddddfffffffffffffffffffffffffff
             ..dddddfffffffffffffffffffffffffff
@@ -3044,6 +3050,34 @@ function spawnWolf () {
     Wolfy.setPosition(WolfSpawn1.x - 0, WolfSpawn1.y - 0)
     Wolfy.follow(WolfSpawn2, 80)
 }
+function MusicFun () {
+    music_Sprite = sprites.create(img`
+        . . . . . . f f f f f f f f f . 
+        . . . . . . f f f f f f f f f . 
+        . . . . . . f b b b b b b b f . 
+        . . . . . . f . . . . . . . f . 
+        . . . . . . f . . . . . . . f . 
+        . . . . . . f . . . . . . . f . 
+        . . . . . . f . . . . . . . f . 
+        . . . . . . f . . . . . . . f . 
+        . . . . . . f . . . . . . . f . 
+        . . . . . . f . . . . . . . f . 
+        . . f f f f f . . . f f f f f . 
+        . f f f f f f . . f f f f f f . 
+        . f f f f f f . . f f f f f f . 
+        . f f f f f b . . f f f f f b . 
+        . b f f f b . . . b f f f b . . 
+        . . b b b . . . . . b b b . . . 
+        `, SpriteKind.Music)
+    music_Sprite.setPosition(Kiddo.x + 24, Kiddo.y + 40)
+    music_Sprite.z = 10
+    animation.runMovementAnimation(
+    music_Sprite,
+    animation.animationPresets(animation.bobbing),
+    2000,
+    true
+    )
+}
 function spawnKiddo () {
     Kiddo = sprites.create(img`
         . . . . 6 6 6 6 6 6 6 . . . . . 
@@ -3206,6 +3240,7 @@ function squirrelAnimate () {
     }
 }
 let moving = false
+let music_Sprite: Sprite = null
 let firePitIs = 0
 let WolfSpawn4: Sprite = null
 let WolfSpawn3: Sprite = null
@@ -3256,8 +3291,10 @@ let rewardHUD2: Sprite = null
 let hasBattery = 0
 let rewardHUD1: Sprite = null
 let hasSpeaker = 0
+let Music = false
 let CurrentLevel = 0
 CurrentLevel = 0
+Music = false
 intro()
 spawnHUD()
 game.onUpdate(function () {
@@ -3279,9 +3316,9 @@ game.onUpdate(function () {
         Trekking_Pole.y = Kiddo.y
     }
     if (hungerPercent == 50) {
-        Kiddo.say("Can I have a snack?", 1500)
+        Kiddo.say("Snack?", 1500)
     } else if (hungerPercent == 30) {
-        Kiddo.say("So HUNGRY!", 1000)
+        Kiddo.say("MUCH HUNGER!", 1000)
     } else if (hungerPercent == 15) {
         Kiddo.say("I'M DYING...", 1000)
     }
@@ -3293,8 +3330,19 @@ game.onUpdate(function () {
         game.over(false, effects.melt)
     }
 })
+forever(function () {
+    if (Music == true) {
+        music.setVolume(32)
+        music.playMelody(music.convertRTTTLToMelody("Steven:d=4,o=5,b=150:8f,16c6,16a,16c6,16a,16c6,16a,16p,16p,16p,8e6,16f6,e6,16p,3p,3p,3p,16a#4,8c6,8f,8g,16g,16p,16p,16p,16d6,16c6,16c6,16p,16p,16c#,16f,16g,16p,16p,16p,16c#,16a,16p,16p,8c,16c6,16p,16p,16p,16c,16c6,16a,16p,16p,16p,16a4,16a,16p,16p,16p,8a4,16f6,16p,16p,16p,8c#,16d6,16p,16p,16a4,16a#,16p,16p,16p,8d,16f6,16p,16p,16p,8f,16c6,16p,16p,16p,16a#4,16c6,16p,16p,16p,16p,8c#,16g6,16p,16p,16p,8f6,16e6,16p,16p,16f,16p,8p,8f.4,8p.,8p.,8a.4,8p.,8p.,8c,8p,8f4,16g6,16p,16p,16p,8c,16g6,16p,16p,8a4,8p,8e.6,8p.,8p.,8e.,8p.,8p.,16e,16c#6,16p,8a6,16g6,16p,16p,16c#,8f6,8p,8p,8p,16a,16f6,8a#.4,8p.,8p.,8a.,8p.,8p.,16d,16c6,16p,16a6,8g6,8p,8p,8p,8d,16e6,16p,16p,8d,8p,8a#.4,8p.,8p.,8a.,8p.,8p.,16c#,16c6,16p,8a6,16g6,16p,16p,16c#,8f6,8p,8p,8p,16c#,16f6,8f.4,8p.,8p.,8a.4,8p.,8p.,8p.,8c,8p,8f.4,8p.,8p.,8p.,16a4,16f6,16g6,16p,16p,8c,8p,8a.4,8p.,8p.,16e,8c#6,8p,8p,8c#,8p,8a.,8p.,8p.,16a,8p,8p.,8p.,8p.,16c#,16g6,16a#4,8f6,8p,8p,8a#.,8p.,8p.,8f,8p,8p,8a6,8p,16a#,16p,16p,16f,16f6,16g6,16p,16p,16f,16f6,8a#.4,8p.,8p.,16a#,8c#6,8p,8p,8c#,8p,8a6,16f6,16p,16p,16p,16f,8e7,8p,8p,8a#,8p,61f3,59a6,16c.7,8c4,8f4,8g4,8p,61a6,9p,8f3,8c4,16f.4,34p,8p,8p,8p,8c3,8c4,8e4,8g4,16c,16p,8p,8g4,8p,8f6,8p,8e6,8p,8p,8a#2,8a#3,8c#4,8f4,8p,8a#4,8f4,8p,8c#4,16a#3,16p,8p,8p,8c3,8p,8f,8p,8g,8p,8c6,8p,8p,2e6,16p,16f4,8c,16f,16p,16f6,16g6,16a,16f6,16p,8e4,16b4,16e,16p,8g#,16e,16c6,8c4,16g4,8c,16d,8e,8p,8c6,8p,16f4,16a#4,16p,16p,8f6,8p,8p,16a#4,16p,16c6,8f4,16c,16f,16p,16g,16g6,16a,16f6,16p,8e6,16b4,16e,16p,8g#,16e,16c6,8c4,16g4,8c,16d,16e,16g,16p,8a#3,8p,16f4,16a#4,16p,16c6,32p,32a#,32a#4,32p,16a,8f4,16c,16f,16p,16g,16g6,16a,16f6,16p,8e6,16b4,16e,16p,8g#,16e,16c6,8c4,16g4,8c,16d,16e,16g,16p,8c6,8p,16f4,16a#4,16p,16p,8a,8p,8p,16g6,16p,16a6,8f4,16c,16f,16p,16f6,16g6,16a,16f6,16p,8e4,16b4,16e,16p,8b,16e,16c6,8c4,16g4,8c,16d,16e,16g,16p,16p,16a#4,8d6,8p,8p,8p,16f,8a#,8p,8p,8p,8f,8p,8a3,16a,16p,16p,16p,8a.4,8p.,8p.,8p.,8a3,8p,8p,8p,8p,16a3,16p,16p,8e6,8p,8p,8p,8p,8p,8p,16a4,16p,16p,8a6,8p,8p,8p,8p,8p,8p,8c#4,8p,8d3,8p,8p,16f#6,16p,16p,16p,8d.,8p.,8p.,8p.,8f#4,8p,8p,8p,8p,8p,16d,16p,16p,16p,8d6,8p,8p,8p,8p,8p,16d,16p,16p,16p,8d6,8p,8p,8p,8g6,8p,8p,32g2,32f#7,32d7,16b.6,16p.,16p.,16p.,8g.4,8p.,8p.,8p.,16d.4,32p,8p,8p,8p,8p,8g4,8p,8p,16b4,16p,16p,16p,16g3,16p,16p,16p,8g4,8p,8p,8p,8p,8p,8p,8p,16g,16p,8p,8p,8p,8f#4,8p,16f#4,16p,16p,16p,16f#4,16p,8a#4,8p,8p,8p,8p,8p,16c#4,16p,16p,16a#4,16p,16f#3,16p,16p,16f#4,16p,16p,16c#,16p,16p,16p,16a#3,16p,16p,16p,8c#,8p,8p,8p,8p,8p,8p,8p,16c#,16p,8p,8p,8p,8f3,8p,16f4,16p,16p,16p,16f3,16p,8a4,8p,8p,8p,8p,8p,16f3,16p,16a4,16p,16f2,16p,16a4,16p,16a4,16p,16p,16p,16f4,16p,8f4,8p,8p,8p,8p,8p,8f4,8p,8p,8p,8p,8f4,8p,8p,16c,16p,16p,16p,16f3,16p,16p,8f4,8p,8p,8p,8p,8p,8p,8f4,8p,8p,8p,8p,8p,8f3,8p,8p,8p,16c,16p,16p,16p,16f3,16p,16p,16p,16a4,16p,8p,8p,8p,8p,32a3,32f#7,32d7,32b6,32p,8g.3,8p.,8p.,8p.,8d.4,8p.,8p.,8p.,16g.3,32p,8p,8p,8p,8p,8g2,8p,8p,16b,16p,16p,16p,16g3,16p,16p,16p,8b,8p,8p,8p,8p,8p,8p,8p,16g,16p,8p,8p,8p,8f#2,8p,16a#,16p,16p,16p,16a#3,16p,8f#,8p,8p,8p,8p,8p,16a#,16p,16p,16c#6,16p,16f#3,16p,16p,16f#,16p,16p,16f#,16p,16p,16p,16f#3,16p,16p,16p,8f#,8p,8p,8p,8p,8p,8p,8p,16a#,16p,8p,8p,8p,8f2,8p,16a,16p,16p,16p,16f4,16p,8a,8p,8p,8p,8p,8p,16c4,16p,16p,16c6,16p,16f2,16p,16p,16c6,16p,16p,16c6,16p,16p,16p,16f3,16p,16p,16p,8a,8p,8p,8p,8p,8p,8p,8p,16f6,16p,8p,8p,8p,8p,16d3,16a3,16d4,16a3,16p,16p,16p,16p,16f#4,16a3,16d4,16a3,16p,16p,16p,16p,16p,8a6,128d7,128c7,128b7,128a7,128g7,128f7,128e7,128d7,128c7,128b6,128a6,128g6,128f6,128e6,128d6,128c6,128b,128a,128g,128f,128e,8d.,43p,5p,8g3,16d6,16b,8d6,16d6,16b,16p,16p,16p,16p,16p,16p,16b4,32p,16p.,16p.,16p.,16p.,16p.,16p.,9b,9p,9p,9p,9p,9p,9p,64b,16p,13p,13p,13p,13p,13p,13p,8b4,8p,8p,8p,16d#4,16g,16p,16p,16e4,16c4,16p,18d6,128g,16c4,18e4,128a,16c4,18e4,128p,16p,16p,16d#4,18c4,128d6,16d#4,18c4,128p,16p,16d#4,16c4,16p,16d#4,16p,32b,32p,16g3,16d3,32g3,32p,16p,16d6,16p,16d4,16p,16d6,16p,16b,16d6,16b6,16b2,16p,16a6,16p,16d#4,16f#4,16p,16a4,16b4,16a4,16p,16f#4,16p,16e6,16p,16c4,16e4,16p,16g,16c,16p,16a,16e4,16p,16c4,16c3,16p,16c4,16d#4,16p,16g,16c,16p,16a,16d#4,16c4,16p,16g4,16p,16g3,16d6,16p,16p,16p,16p,16g4,8d6,8p,8p,8p,8p,16b3,16b,16p,16p,16p,16p,16f#4,16p,16p,16p,16p,16f#4,16g6,16p,16p,16p,16p,8d#4,16e6,16p,16p,16p,16b4,16g,16p,16p,16p,16p,16c,16p,16p,16p,16g4,16d6,16p,16p,16p,16c4,8g,8p,8p,8p,8p,16e4,16e6,16p,16p,16p,16c,16p,16p,16p,16g4,16d6,16p,16p,16p,16g4,8g,8p,8p,8p,8p,16c,16b,16p,8g3,16d6,16p,16p,16p,16p,16b,8d6,8p,8p,8p,8p,16g,16b,16p,16p,16b2,16a6,16g6,16p,16p,16p,16p,8b.3,8p.,8p.,8p.,16b3,16g,16p,16p,16e6,8d6,8p,8p,8p,8p,8c,16a,16p,16p,16p,16c,16e6,16p,16c4,8d6,8p,8p,8p,8p,16c4,16a,16b,16p,16p,16p,16p,8d#4,8p,8p,16b,16d4,16g4,16d4,16p,16g4,16p,16a6,16p,16g6,16p,16d4,16b3,16p,16d#4,16f#4,16p,16e6,16b4,16p,16f#6,16f#4,16d#4,16p,16p,16p,16p,16e4,16p,16p,16p,16e4,16e6,16p,16p,16p,16p,8e.4,8p.,8p.,8p.,8p.,16e4,16d6,16p,16p,8b6,16a6,16p,16p,16p,16g6,16g6,16a6,16b6,16p,2b6,8d6,8p,8p,8g6,8p,8p,16f#6,16p,16p,8g6,8p,8p,8a.6,8f#6,32f#7,32d#7,32b6,6a6,8d#6,8p,8p,8p,8p,8p,8f#,8p,8p,8p,8p,8p,8f#6,8p,8p,8p,8p,8p,8b4,8p,8p,8p,8p,8p,16g,16p,16p,16p,16p,16p,16c6,16c4,16e4,16g4,8c,8e,16d6,16p,16b6,16p,16a6,16c,16p,8g6,8p,8e.,8p.,8p.,8p.,16g6,16c4,16d#4,16g4,16p,16f3,16f4,16a4,16c,16p,16p,16p,16p,16d#6,16a3,16p,16p,16p,16p,16a6,16f#4,16p,16p,16p,16p,16b,16f#4,16p,16p,16p,16p,16b,16p,16p,16p,16p,16d6,16g2,16g3,16b3,8d4,16g4,16p,16p,16d4,16b3,16p,16p,16g2,16g3,16b3,16p,16p,16a6,16p,16p,16g4,16p,16p,16a,16b3,16g3,16p,16p,16p,16p,16b,16b3,16d#4,16f#4,16p,16p,16p,16p,16a6,16f#4,16d#4,16b3,16p,16p,16p,16p,16b,16b3,16d#4,16f#4,16p,16b4,16p,16p,16a,16p,16a6,30c4,34e4,34p,256g6,30g4,17b4,34p,17p.,17p.,17p.,256b,8p.,8p.,8p.,8p.,8c,8p,8p,8p,8c,8p,16a6,16p,16p,16g,16g6,16a6,16p,16p,16c,16p,16p,16d#6,16c,16d#,16g,16b,d#6,b.6,8g6,8p,30g6,30p,31b6,1536d6,30d7,30p,8a7,40p,2f#.7"), 150)
+        music.rest(music.beat(BeatFraction.Double))
+        music.playMelody(music.convertRTTTLToMelody("fries:d=4,o=5,b=120:2p,32d4,512p,34g4,256p,2b4,256d6,8p,16b4,8b.,9b4,64p,9b4,64p,32b.4,64p,9a,64p,16a,16b4,32b.,64p,32a.,64p,16g,32c.,64p,8e.,9c,64p,9c,64p,32c.,64p,9e.,64p,9g,64p,32g.,64p,16f#,16a4,8f#.,9a4,64p,8a4,32f#.,64p,9f#,64p,32e.,64p,32e.,64p,32e.,64p,32e.,64p,16d,16b4,8d.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,9b4,64p,8d6,32b.4,64p,8b.,9b4,64p,9b4,64p,32b.4,64p,9a,64p,16a,16b4,32b.,64p,32a.,64p,16g,32c.,64p,8e.,9c,64p,16c,16e,32c.,64p,32e.,64p,9e,64p,32e.,64p,32g.,64p,32g.,64p,16f#,32a.4,64p,8f#.,9a4,64p,16a4,32f#.,64p,32f#.,64p,32f#.,64p,32f#.,64p,32e.,64p,9e,64p,32e.,64p,16d,32b.4,64p,8d.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,9b4,64p,9g6,64p,16d6,16b4,32d.6,64p,16b,16b4,16b,16b4,16a,32b.4,64p,8a.,9b4,64p,9f#6,64p,16d#6,16b4,32d#.6,64p,16b,16b4,16b,16b4,16a,32b.4,64p,9a.,64p,32g.,64p,32g.,64p,9e6,64p,32g.,64p,9g,64p,32g.,64p,32g.,64p,32g.,64p,32a.,64p,16g,32b.4,64p,8g.,16b4,32g.,64p,32e.6,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,9a,64p,16g,16b4,9g,64p,9b4,64p,32g.6,64p,16d6,32b.4,64p,9d6,64p,16b,16b4,32b.,64p,32b.,64p,16a,32b.4,64p,9a.,64p,16b4,32a.,64p,32f#.6,64p,32d#.6,64p,32d#.6,64p,32d#.6,64p,9d#6,64p,9b,64p,32b.,64p,16a,32b.4,64p,9a.,64p,9b4,64p,9e6,64p,32g.,64p,9g,64p,32g.,64p,9g,64p,32a.,64p,16g,32b.4,64p,8g.,16b4,32g.,64p,32e.6,64p,32g.,64p,32g.,64p,32g.,64p,9g,64p,9g,64p,32a.,64p,16g,32b.4,64p,8g.,9b4,64p,8d6,32b.4,64p,9b.,64p,9b4,64p,9b4,64p,32b.4,64p,9a,64p,32a.,64p,32b.4,64p,32b.,64p,9a,64p,16g,16c,8e,9c,64p,9c,64p,32c.,64p,9c.,64p,9g,64p,32g.,64p,16f#,32a.4,64p,8f#.,9a4,64p,9a4,64p,32a.4,64p,9a.4,64p,9e,64p,9e,64p,32d.,64p,8d.,9b4,64p,9b4,64p,32b.4,64p,9b4,64p,16d6,32b.4,64p,32b.,64p,8d6,32b.4,64p,8b.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,16b4,32b.,64p,9a,64p,32g.,64p,32c.,64p,9e,64p,9c,64p,9c,64p,32e.,64p,32c.,64p,9g,64p,9c,64p,9f#,64p,32a.4,64p,9a.4,64p,9a4,64p,9a4,64p,32a.4,64p,9f#,64p,32e.,64p,32e.,64p,32e.,64p,9e,64p,16d,16b4,16d,16p,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,9b4,64p,8d6,16b4,8b.,8b4,8d6,8b,8d6,8b,8d#6,32b.4,64p,8b.,9b4,64p,32a.,64p,16a,32b.4,64p,9a,64p,32a.,64p,9b,64p,32a.,64p,16g,32b.4,64p,8e.,9b4,64p,16b4,32a.,64p,32a.,64p,32a.,64p,9a,64p,9b,64p,16a,16g,16b4,8e.,16b4,16p,16b4,16b,16d6,16b,9d6,64p,32d.6,64p,32b.,64p,32d.6,64p,16b,16b4,9b.,64p,16b4,16p,16b4,16a,32b.,64p,32b.,64p,32b.,64p,32b.,64p,32b.,64p,32b.,64p,8a,16g,8f#.,9b4,64p,16b4,16a,16b4,16g,8a,8g,8b,16b4,8g.,9b4,64p,16b4,16a,16b4,16g,16a,16g,16a,16g,8b,32g.,64p,8g.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,8b4,32d4,512p,34g4,307p,1b4"), 120)
+        music.rest(music.beat(BeatFraction.Double))
+        music.playMelody(music.convertRTTTLToMelody("problem:d=4,o=5,b=240:8e4,d6,b,a,8b,8p,8p,8p,2d4,8p,8g,8g,8g,8p,8p,8p,8p,8a,8g,g.,8g,d6,p,p,p,p,2g4,8p,8g,8g,8g,8p,8p,8p,8b4,e6,8d6,8b.,8g.,8b,8p,8p,8p,2b3,8p,8g,8g,8g,8p,8p,8p,8p,8c,8g,g.,8g,d6,p,p,p,p,2g4,8p,8g,8g,8g,8p,8p,8p,2e4,8g6,8f#6,b,p,p,p,2b.4,8a,8g,8p,8p,8p,8p,8g4,8g,2g.,2p.,2p.,2p.,2p.,2b,8p,8g,8g,8g,e4,b4,e,b4,b3,f#4,b4,f#4,c4,g4,c,g4,g3,d4,g4,d4,p,8e4,8b,8p,8a,8g,8p,8a,8b,8p,8a,8g,8p,8b3,8b,8d4,8p,8f#4,8g,8p,8g,8g,8p,8g6,8g6,8p,8f#6,8f#6,8p,8e6,8e6,8p,c,p,g3,b3,d4,g4,p,8d.6,16b,8g4,8b,8p,8b.4,16b,8e,8e6,8p,8d#6,8b,d#4,8f#4,8p,p,8b4,8g,8p,8a,8g,8e4,8g,8g4,8p,p,c,p,d6,b3,p,d4,g4,p,8e4,8b,8p,8a,8g,8p,8a,8b,8p,8e,8g,8p,8b3,8b,8d4,8p,8f#4,8g,8p,8b4,8g,8p,8g6,8g6,8p,8e4,8f#6,8p,8g4,8e6,8p,d6,g3,b3,p,b,g4,c4,c4,p,p,p,p,2e4,2p,c4,c4,p,p,p,p,2a#4,2p,f#6,b3,p,p,p,2d#4,2p,b3,p,b,p,p,p,2f#4,e4,e4,p,p,p,p,2e4,2p,e6,e4,p,p,p,p,2b4,2p,a,c4,p,p,p,2g4,2p,g,c4,p,p,p,2e4,c4,c4,p,p,p,p,2c4,2p,e6,c4,p,p,p,p,2g6,2p,b3,p,e6,p,p,p,d#4,b,p,a,b3,p,p,p,2d#4,e4,e4,p,p,p,p,2g4,2p,e6,e4,p,p,p,p,2e,2p,a,c4,p,p,p,2b4,2p,g,c4,p,p,p,c4,a,p,8e4,8d6,8p,8g4,8a,8p,8b4,8d6,8p,8b,8a,8p,b3,p,8d4,8g,8p,f#4,p,b4,p,8a,8g,8e4,8g,8g4,8g,8p,d6,p,d6,b3,p,b,g4,c4,c4,p,p,p,p,2e4,2p,e6,c4,p,p,p,p,2e4,2p,f#6,b3,p,p,p,2a4,2p,b3,p,b,p,p,p,2d#4,e4,e4,p,p,p,p,2g4,2p,e6,e4,p,p,p,p,2g4,2p,c4,c4,p,p,p,2c4,2p,g,c4,p,p,p,2e4,2p,2p,2p,2p,8b,d6,b,a,8b,8p,8p,8p,2d4,8p,8g,8g,8g,8p,8p,8p,8p,8c4,8g,2g.,2p.,2p.,2p.,2p.,1g4"), 240)
+        music.rest(music.beat(BeatFraction.Double))
+    }
+})
 game.onUpdateInterval(500, function () {
-    hungerPercent += -1.1
+    hungerPercent += -1
     drawHUDMeter(hungerPercent, hungerBar, 4, 14)
     drawHUDMeter(healthPercent, healthBar, 3, 2)
     if (bearIs == 1) {

@@ -4,7 +4,8 @@
     "dependencies": {
         "device": "*",
         "animation": "*",
-        "tilemaps": "github:microsoft/pxt-tilemaps#v1.10.0"
+        "tilemaps": "github:microsoft/pxt-tilemaps#v1.10.0",
+        "pxt-rtttl": "github:pelikhan/pxt-rtttl#v0.0.10"
     },
     "files": [
         "main.blocks",
@@ -18,7 +19,7 @@
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.2.9",
+        "target": "1.2.10",
         "targetId": "arcade"
     },
     "supportedTargets": [
