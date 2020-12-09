@@ -84,8 +84,7 @@ function rewardHUD () {
     }
 }
 sprites.onOverlap(SpriteKind.bear, SpriteKind.Player, function (sprite, otherSprite) {
-    healthPercent += -10
-    BearSprite.say("CHOMP", 350)
+    healthPercent += -14
     pause(1000)
 })
 // 0 - up
@@ -119,6 +118,16 @@ function squirrelPath () {
     Squirrel.follow(Kiddo, 100)
 }
 sprites.onOverlap(SpriteKind.Sword, SpriteKind.bear, function (sprite, otherSprite) {
+    if (Kiddo.x < otherSprite.x) {
+        otherSprite.x += 8
+    } else {
+        otherSprite.x += -8
+    }
+    if (Kiddo.y < otherSprite.y) {
+        otherSprite.y += 8
+    } else {
+        otherSprite.y += -8
+    }
     if (BearHealth > 1) {
         BearHealth += -1
     } else if (BearHealth == 1) {
@@ -1358,7 +1367,7 @@ sprites.onOverlap(SpriteKind.Sword, SpriteKind.Wolf, function (sprite, otherSpri
         } else {
             pause(500)
             game.splash("You haven't satisfied", "your thirst for junk!")
-            game.over(true)
+            game.over(true, effects.clouds)
         }
     }
     pause(500)
@@ -2440,21 +2449,21 @@ function spawnRandGrass () {
         if (randint(1, 3) == 1) {
             tiles.setTileAt(value222, myTiles.tile9)
         } else if (randint(1, 2) == 1) {
-            tiles.setTileAt(value222, myTiles.tile7)
+            tiles.setTileAt(value222, myTiles.tile8)
         } else if (randint(1, 2) == 1) {
-            tiles.setTileAt(value222, myTiles.tile4)
+            tiles.setTileAt(value222, myTiles.tile7)
         } else if (randint(1, 5) == 1) {
+            tiles.setTileAt(value222, myTiles.tile9)
+        } else if (randint(1, 6) == 1) {
+            tiles.setTileAt(value222, myTiles.tile5)
+        } else if (randint(1, 6) == 1) {
             tiles.setTileAt(value222, myTiles.tile40)
-        } else if (randint(1, 6) == 1) {
-            tiles.setTileAt(value222, myTiles.tile6)
-        } else if (randint(1, 6) == 1) {
-            tiles.setTileAt(value222, myTiles.tile53)
         } else if (randint(1, 5) == 1) {
-            tiles.setTileAt(value222, myTiles.transparency16)
+            tiles.setTileAt(value222, myTiles.tile53)
         } else if (randint(1, 5) == 1) {
             tiles.setTileAt(value222, myTiles.tile5)
         } else {
-            tiles.setTileAt(value222, myTiles.tile8)
+            tiles.setTileAt(value222, myTiles.tile61)
         }
     }
 }
@@ -2488,7 +2497,19 @@ function spawnSquirrel () {
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.exit2)
     squirrelExitIs = 1
-    squirrelExit.setPosition(Kiddo.x + 70, Kiddo.y + 32)
+    squirrelExit.setPosition(Kiddo.x + 78, Kiddo.y + 48)
+    if (squirrelExit.isHittingTile(CollisionDirection.Right)) {
+        squirrelExit.x += -8
+    }
+    if (squirrelExit.isHittingTile(CollisionDirection.Left)) {
+        squirrelExit.x += 8
+    }
+    if (squirrelExit.isHittingTile(CollisionDirection.Top)) {
+        squirrelExit.y += 8
+    }
+    if (squirrelExit.isHittingTile(CollisionDirection.Bottom)) {
+        squirrelExit.y += -8
+    }
     squirrelExit.z = 1
     Squirrel = sprites.create(img`
         . . . c . b . . . . . b b b b . 
@@ -2528,7 +2549,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     walk()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.PyBadge, function (sprite, otherSprite) {
-    game.over(true)
+    game.over(true, effects.clouds)
 })
 function drawHUDMeter2 (percent: number, hudSprite: Sprite, onColor: number, offColor: number) {
     hudSprite.image.fill(offColor)
@@ -2626,8 +2647,8 @@ function spawnBear () {
         ..................................
         `, SpriteKind.bear)
     BearSprite.setPosition(Kiddo.x + 50, Kiddo.y + 50)
-    BearSprite.follow(Kiddo, 55)
-    BearHealth = 4
+    BearSprite.follow(Kiddo, 48)
+    BearHealth = 6
     bearIs = 1
 }
 function bearAnimate () {
@@ -2877,6 +2898,9 @@ scene.onOverlapTile(SpriteKind.Player, myTiles.tile52, function (sprite, locatio
     Level5()
 })
 function destroySprites () {
+    for (let value4 of sprites.allOfKind(SpriteKind.Music)) {
+        value4.destroy()
+    }
     for (let value4 of sprites.allOfKind(SpriteKind.treatkind)) {
         value4.destroy()
     }
@@ -3276,6 +3300,7 @@ let batteryIs = 0
 let speakerIs = 0
 let Wolfy: Sprite = null
 let bearIs = 0
+let BearSprite: Sprite = null
 let bearSteak: Sprite = null
 let BearHealth = 0
 let Kiddo: Sprite = null
@@ -3283,7 +3308,6 @@ let Squirrel: Sprite = null
 let hungerPercent = 0
 let hasReward = 0
 let lastDirection = 0
-let BearSprite: Sprite = null
 let healthPercent = 0
 let WolfHPHUD: Sprite = null
 let WolfyIs = 0
@@ -3333,11 +3357,12 @@ game.onUpdate(function () {
 forever(function () {
     if (Music == true) {
         music.setVolume(32)
+        music.rest(music.beat(BeatFraction.Double))
         music.playMelody(music.convertRTTTLToMelody("Steven:d=4,o=5,b=150:8f,16c6,16a,16c6,16a,16c6,16a,16p,16p,16p,8e6,16f6,e6,16p,3p,3p,3p,16a#4,8c6,8f,8g,16g,16p,16p,16p,16d6,16c6,16c6,16p,16p,16c#,16f,16g,16p,16p,16p,16c#,16a,16p,16p,8c,16c6,16p,16p,16p,16c,16c6,16a,16p,16p,16p,16a4,16a,16p,16p,16p,8a4,16f6,16p,16p,16p,8c#,16d6,16p,16p,16a4,16a#,16p,16p,16p,8d,16f6,16p,16p,16p,8f,16c6,16p,16p,16p,16a#4,16c6,16p,16p,16p,16p,8c#,16g6,16p,16p,16p,8f6,16e6,16p,16p,16f,16p,8p,8f.4,8p.,8p.,8a.4,8p.,8p.,8c,8p,8f4,16g6,16p,16p,16p,8c,16g6,16p,16p,8a4,8p,8e.6,8p.,8p.,8e.,8p.,8p.,16e,16c#6,16p,8a6,16g6,16p,16p,16c#,8f6,8p,8p,8p,16a,16f6,8a#.4,8p.,8p.,8a.,8p.,8p.,16d,16c6,16p,16a6,8g6,8p,8p,8p,8d,16e6,16p,16p,8d,8p,8a#.4,8p.,8p.,8a.,8p.,8p.,16c#,16c6,16p,8a6,16g6,16p,16p,16c#,8f6,8p,8p,8p,16c#,16f6,8f.4,8p.,8p.,8a.4,8p.,8p.,8p.,8c,8p,8f.4,8p.,8p.,8p.,16a4,16f6,16g6,16p,16p,8c,8p,8a.4,8p.,8p.,16e,8c#6,8p,8p,8c#,8p,8a.,8p.,8p.,16a,8p,8p.,8p.,8p.,16c#,16g6,16a#4,8f6,8p,8p,8a#.,8p.,8p.,8f,8p,8p,8a6,8p,16a#,16p,16p,16f,16f6,16g6,16p,16p,16f,16f6,8a#.4,8p.,8p.,16a#,8c#6,8p,8p,8c#,8p,8a6,16f6,16p,16p,16p,16f,8e7,8p,8p,8a#,8p,61f3,59a6,16c.7,8c4,8f4,8g4,8p,61a6,9p,8f3,8c4,16f.4,34p,8p,8p,8p,8c3,8c4,8e4,8g4,16c,16p,8p,8g4,8p,8f6,8p,8e6,8p,8p,8a#2,8a#3,8c#4,8f4,8p,8a#4,8f4,8p,8c#4,16a#3,16p,8p,8p,8c3,8p,8f,8p,8g,8p,8c6,8p,8p,2e6,16p,16f4,8c,16f,16p,16f6,16g6,16a,16f6,16p,8e4,16b4,16e,16p,8g#,16e,16c6,8c4,16g4,8c,16d,8e,8p,8c6,8p,16f4,16a#4,16p,16p,8f6,8p,8p,16a#4,16p,16c6,8f4,16c,16f,16p,16g,16g6,16a,16f6,16p,8e6,16b4,16e,16p,8g#,16e,16c6,8c4,16g4,8c,16d,16e,16g,16p,8a#3,8p,16f4,16a#4,16p,16c6,32p,32a#,32a#4,32p,16a,8f4,16c,16f,16p,16g,16g6,16a,16f6,16p,8e6,16b4,16e,16p,8g#,16e,16c6,8c4,16g4,8c,16d,16e,16g,16p,8c6,8p,16f4,16a#4,16p,16p,8a,8p,8p,16g6,16p,16a6,8f4,16c,16f,16p,16f6,16g6,16a,16f6,16p,8e4,16b4,16e,16p,8b,16e,16c6,8c4,16g4,8c,16d,16e,16g,16p,16p,16a#4,8d6,8p,8p,8p,16f,8a#,8p,8p,8p,8f,8p,8a3,16a,16p,16p,16p,8a.4,8p.,8p.,8p.,8a3,8p,8p,8p,8p,16a3,16p,16p,8e6,8p,8p,8p,8p,8p,8p,16a4,16p,16p,8a6,8p,8p,8p,8p,8p,8p,8c#4,8p,8d3,8p,8p,16f#6,16p,16p,16p,8d.,8p.,8p.,8p.,8f#4,8p,8p,8p,8p,8p,16d,16p,16p,16p,8d6,8p,8p,8p,8p,8p,16d,16p,16p,16p,8d6,8p,8p,8p,8g6,8p,8p,32g2,32f#7,32d7,16b.6,16p.,16p.,16p.,8g.4,8p.,8p.,8p.,16d.4,32p,8p,8p,8p,8p,8g4,8p,8p,16b4,16p,16p,16p,16g3,16p,16p,16p,8g4,8p,8p,8p,8p,8p,8p,8p,16g,16p,8p,8p,8p,8f#4,8p,16f#4,16p,16p,16p,16f#4,16p,8a#4,8p,8p,8p,8p,8p,16c#4,16p,16p,16a#4,16p,16f#3,16p,16p,16f#4,16p,16p,16c#,16p,16p,16p,16a#3,16p,16p,16p,8c#,8p,8p,8p,8p,8p,8p,8p,16c#,16p,8p,8p,8p,8f3,8p,16f4,16p,16p,16p,16f3,16p,8a4,8p,8p,8p,8p,8p,16f3,16p,16a4,16p,16f2,16p,16a4,16p,16a4,16p,16p,16p,16f4,16p,8f4,8p,8p,8p,8p,8p,8f4,8p,8p,8p,8p,8f4,8p,8p,16c,16p,16p,16p,16f3,16p,16p,8f4,8p,8p,8p,8p,8p,8p,8f4,8p,8p,8p,8p,8p,8f3,8p,8p,8p,16c,16p,16p,16p,16f3,16p,16p,16p,16a4,16p,8p,8p,8p,8p,32a3,32f#7,32d7,32b6,32p,8g.3,8p.,8p.,8p.,8d.4,8p.,8p.,8p.,16g.3,32p,8p,8p,8p,8p,8g2,8p,8p,16b,16p,16p,16p,16g3,16p,16p,16p,8b,8p,8p,8p,8p,8p,8p,8p,16g,16p,8p,8p,8p,8f#2,8p,16a#,16p,16p,16p,16a#3,16p,8f#,8p,8p,8p,8p,8p,16a#,16p,16p,16c#6,16p,16f#3,16p,16p,16f#,16p,16p,16f#,16p,16p,16p,16f#3,16p,16p,16p,8f#,8p,8p,8p,8p,8p,8p,8p,16a#,16p,8p,8p,8p,8f2,8p,16a,16p,16p,16p,16f4,16p,8a,8p,8p,8p,8p,8p,16c4,16p,16p,16c6,16p,16f2,16p,16p,16c6,16p,16p,16c6,16p,16p,16p,16f3,16p,16p,16p,8a,8p,8p,8p,8p,8p,8p,8p,16f6,16p,8p,8p,8p,8p,16d3,16a3,16d4,16a3,16p,16p,16p,16p,16f#4,16a3,16d4,16a3,16p,16p,16p,16p,16p,8a6,128d7,128c7,128b7,128a7,128g7,128f7,128e7,128d7,128c7,128b6,128a6,128g6,128f6,128e6,128d6,128c6,128b,128a,128g,128f,128e,8d.,43p,5p,8g3,16d6,16b,8d6,16d6,16b,16p,16p,16p,16p,16p,16p,16b4,32p,16p.,16p.,16p.,16p.,16p.,16p.,9b,9p,9p,9p,9p,9p,9p,64b,16p,13p,13p,13p,13p,13p,13p,8b4,8p,8p,8p,16d#4,16g,16p,16p,16e4,16c4,16p,18d6,128g,16c4,18e4,128a,16c4,18e4,128p,16p,16p,16d#4,18c4,128d6,16d#4,18c4,128p,16p,16d#4,16c4,16p,16d#4,16p,32b,32p,16g3,16d3,32g3,32p,16p,16d6,16p,16d4,16p,16d6,16p,16b,16d6,16b6,16b2,16p,16a6,16p,16d#4,16f#4,16p,16a4,16b4,16a4,16p,16f#4,16p,16e6,16p,16c4,16e4,16p,16g,16c,16p,16a,16e4,16p,16c4,16c3,16p,16c4,16d#4,16p,16g,16c,16p,16a,16d#4,16c4,16p,16g4,16p,16g3,16d6,16p,16p,16p,16p,16g4,8d6,8p,8p,8p,8p,16b3,16b,16p,16p,16p,16p,16f#4,16p,16p,16p,16p,16f#4,16g6,16p,16p,16p,16p,8d#4,16e6,16p,16p,16p,16b4,16g,16p,16p,16p,16p,16c,16p,16p,16p,16g4,16d6,16p,16p,16p,16c4,8g,8p,8p,8p,8p,16e4,16e6,16p,16p,16p,16c,16p,16p,16p,16g4,16d6,16p,16p,16p,16g4,8g,8p,8p,8p,8p,16c,16b,16p,8g3,16d6,16p,16p,16p,16p,16b,8d6,8p,8p,8p,8p,16g,16b,16p,16p,16b2,16a6,16g6,16p,16p,16p,16p,8b.3,8p.,8p.,8p.,16b3,16g,16p,16p,16e6,8d6,8p,8p,8p,8p,8c,16a,16p,16p,16p,16c,16e6,16p,16c4,8d6,8p,8p,8p,8p,16c4,16a,16b,16p,16p,16p,16p,8d#4,8p,8p,16b,16d4,16g4,16d4,16p,16g4,16p,16a6,16p,16g6,16p,16d4,16b3,16p,16d#4,16f#4,16p,16e6,16b4,16p,16f#6,16f#4,16d#4,16p,16p,16p,16p,16e4,16p,16p,16p,16e4,16e6,16p,16p,16p,16p,8e.4,8p.,8p.,8p.,8p.,16e4,16d6,16p,16p,8b6,16a6,16p,16p,16p,16g6,16g6,16a6,16b6,16p,2b6,8d6,8p,8p,8g6,8p,8p,16f#6,16p,16p,8g6,8p,8p,8a.6,8f#6,32f#7,32d#7,32b6,6a6,8d#6,8p,8p,8p,8p,8p,8f#,8p,8p,8p,8p,8p,8f#6,8p,8p,8p,8p,8p,8b4,8p,8p,8p,8p,8p,16g,16p,16p,16p,16p,16p,16c6,16c4,16e4,16g4,8c,8e,16d6,16p,16b6,16p,16a6,16c,16p,8g6,8p,8e.,8p.,8p.,8p.,16g6,16c4,16d#4,16g4,16p,16f3,16f4,16a4,16c,16p,16p,16p,16p,16d#6,16a3,16p,16p,16p,16p,16a6,16f#4,16p,16p,16p,16p,16b,16f#4,16p,16p,16p,16p,16b,16p,16p,16p,16p,16d6,16g2,16g3,16b3,8d4,16g4,16p,16p,16d4,16b3,16p,16p,16g2,16g3,16b3,16p,16p,16a6,16p,16p,16g4,16p,16p,16a,16b3,16g3,16p,16p,16p,16p,16b,16b3,16d#4,16f#4,16p,16p,16p,16p,16a6,16f#4,16d#4,16b3,16p,16p,16p,16p,16b,16b3,16d#4,16f#4,16p,16b4,16p,16p,16a,16p,16a6,30c4,34e4,34p,256g6,30g4,17b4,34p,17p.,17p.,17p.,256b,8p.,8p.,8p.,8p.,8c,8p,8p,8p,8c,8p,16a6,16p,16p,16g,16g6,16a6,16p,16p,16c,16p,16p,16d#6,16c,16d#,16g,16b,d#6,b.6,8g6,8p,30g6,30p,31b6,1536d6,30d7,30p,8a7,40p,2f#.7"), 150)
-        music.rest(music.beat(BeatFraction.Double))
-        music.playMelody(music.convertRTTTLToMelody("fries:d=4,o=5,b=120:2p,32d4,512p,34g4,256p,2b4,256d6,8p,16b4,8b.,9b4,64p,9b4,64p,32b.4,64p,9a,64p,16a,16b4,32b.,64p,32a.,64p,16g,32c.,64p,8e.,9c,64p,9c,64p,32c.,64p,9e.,64p,9g,64p,32g.,64p,16f#,16a4,8f#.,9a4,64p,8a4,32f#.,64p,9f#,64p,32e.,64p,32e.,64p,32e.,64p,32e.,64p,16d,16b4,8d.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,9b4,64p,8d6,32b.4,64p,8b.,9b4,64p,9b4,64p,32b.4,64p,9a,64p,16a,16b4,32b.,64p,32a.,64p,16g,32c.,64p,8e.,9c,64p,16c,16e,32c.,64p,32e.,64p,9e,64p,32e.,64p,32g.,64p,32g.,64p,16f#,32a.4,64p,8f#.,9a4,64p,16a4,32f#.,64p,32f#.,64p,32f#.,64p,32f#.,64p,32e.,64p,9e,64p,32e.,64p,16d,32b.4,64p,8d.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,9b4,64p,9g6,64p,16d6,16b4,32d.6,64p,16b,16b4,16b,16b4,16a,32b.4,64p,8a.,9b4,64p,9f#6,64p,16d#6,16b4,32d#.6,64p,16b,16b4,16b,16b4,16a,32b.4,64p,9a.,64p,32g.,64p,32g.,64p,9e6,64p,32g.,64p,9g,64p,32g.,64p,32g.,64p,32g.,64p,32a.,64p,16g,32b.4,64p,8g.,16b4,32g.,64p,32e.6,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,9a,64p,16g,16b4,9g,64p,9b4,64p,32g.6,64p,16d6,32b.4,64p,9d6,64p,16b,16b4,32b.,64p,32b.,64p,16a,32b.4,64p,9a.,64p,16b4,32a.,64p,32f#.6,64p,32d#.6,64p,32d#.6,64p,32d#.6,64p,9d#6,64p,9b,64p,32b.,64p,16a,32b.4,64p,9a.,64p,9b4,64p,9e6,64p,32g.,64p,9g,64p,32g.,64p,9g,64p,32a.,64p,16g,32b.4,64p,8g.,16b4,32g.,64p,32e.6,64p,32g.,64p,32g.,64p,32g.,64p,9g,64p,9g,64p,32a.,64p,16g,32b.4,64p,8g.,9b4,64p,8d6,32b.4,64p,9b.,64p,9b4,64p,9b4,64p,32b.4,64p,9a,64p,32a.,64p,32b.4,64p,32b.,64p,9a,64p,16g,16c,8e,9c,64p,9c,64p,32c.,64p,9c.,64p,9g,64p,32g.,64p,16f#,32a.4,64p,8f#.,9a4,64p,9a4,64p,32a.4,64p,9a.4,64p,9e,64p,9e,64p,32d.,64p,8d.,9b4,64p,9b4,64p,32b.4,64p,9b4,64p,16d6,32b.4,64p,32b.,64p,8d6,32b.4,64p,8b.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,16b4,32b.,64p,9a,64p,32g.,64p,32c.,64p,9e,64p,9c,64p,9c,64p,32e.,64p,32c.,64p,9g,64p,9c,64p,9f#,64p,32a.4,64p,9a.4,64p,9a4,64p,9a4,64p,32a.4,64p,9f#,64p,32e.,64p,32e.,64p,32e.,64p,9e,64p,16d,16b4,16d,16p,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,9b4,64p,8d6,16b4,8b.,8b4,8d6,8b,8d6,8b,8d#6,32b.4,64p,8b.,9b4,64p,32a.,64p,16a,32b.4,64p,9a,64p,32a.,64p,9b,64p,32a.,64p,16g,32b.4,64p,8e.,9b4,64p,16b4,32a.,64p,32a.,64p,32a.,64p,9a,64p,9b,64p,16a,16g,16b4,8e.,16b4,16p,16b4,16b,16d6,16b,9d6,64p,32d.6,64p,32b.,64p,32d.6,64p,16b,16b4,9b.,64p,16b4,16p,16b4,16a,32b.,64p,32b.,64p,32b.,64p,32b.,64p,32b.,64p,32b.,64p,8a,16g,8f#.,9b4,64p,16b4,16a,16b4,16g,8a,8g,8b,16b4,8g.,9b4,64p,16b4,16a,16b4,16g,16a,16g,16a,16g,8b,32g.,64p,8g.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,8b4,32d4,512p,34g4,307p,1b4"), 120)
-        music.rest(music.beat(BeatFraction.Double))
+        music.rest(music.beat(BeatFraction.Breve))
         music.playMelody(music.convertRTTTLToMelody("problem:d=4,o=5,b=240:8e4,d6,b,a,8b,8p,8p,8p,2d4,8p,8g,8g,8g,8p,8p,8p,8p,8a,8g,g.,8g,d6,p,p,p,p,2g4,8p,8g,8g,8g,8p,8p,8p,8b4,e6,8d6,8b.,8g.,8b,8p,8p,8p,2b3,8p,8g,8g,8g,8p,8p,8p,8p,8c,8g,g.,8g,d6,p,p,p,p,2g4,8p,8g,8g,8g,8p,8p,8p,2e4,8g6,8f#6,b,p,p,p,2b.4,8a,8g,8p,8p,8p,8p,8g4,8g,2g.,2p.,2p.,2p.,2p.,2b,8p,8g,8g,8g,e4,b4,e,b4,b3,f#4,b4,f#4,c4,g4,c,g4,g3,d4,g4,d4,p,8e4,8b,8p,8a,8g,8p,8a,8b,8p,8a,8g,8p,8b3,8b,8d4,8p,8f#4,8g,8p,8g,8g,8p,8g6,8g6,8p,8f#6,8f#6,8p,8e6,8e6,8p,c,p,g3,b3,d4,g4,p,8d.6,16b,8g4,8b,8p,8b.4,16b,8e,8e6,8p,8d#6,8b,d#4,8f#4,8p,p,8b4,8g,8p,8a,8g,8e4,8g,8g4,8p,p,c,p,d6,b3,p,d4,g4,p,8e4,8b,8p,8a,8g,8p,8a,8b,8p,8e,8g,8p,8b3,8b,8d4,8p,8f#4,8g,8p,8b4,8g,8p,8g6,8g6,8p,8e4,8f#6,8p,8g4,8e6,8p,d6,g3,b3,p,b,g4,c4,c4,p,p,p,p,2e4,2p,c4,c4,p,p,p,p,2a#4,2p,f#6,b3,p,p,p,2d#4,2p,b3,p,b,p,p,p,2f#4,e4,e4,p,p,p,p,2e4,2p,e6,e4,p,p,p,p,2b4,2p,a,c4,p,p,p,2g4,2p,g,c4,p,p,p,2e4,c4,c4,p,p,p,p,2c4,2p,e6,c4,p,p,p,p,2g6,2p,b3,p,e6,p,p,p,d#4,b,p,a,b3,p,p,p,2d#4,e4,e4,p,p,p,p,2g4,2p,e6,e4,p,p,p,p,2e,2p,a,c4,p,p,p,2b4,2p,g,c4,p,p,p,c4,a,p,8e4,8d6,8p,8g4,8a,8p,8b4,8d6,8p,8b,8a,8p,b3,p,8d4,8g,8p,f#4,p,b4,p,8a,8g,8e4,8g,8g4,8g,8p,d6,p,d6,b3,p,b,g4,c4,c4,p,p,p,p,2e4,2p,e6,c4,p,p,p,p,2e4,2p,f#6,b3,p,p,p,2a4,2p,b3,p,b,p,p,p,2d#4,e4,e4,p,p,p,p,2g4,2p,e6,e4,p,p,p,p,2g4,2p,c4,c4,p,p,p,2c4,2p,g,c4,p,p,p,2e4,2p,2p,2p,2p,8b,d6,b,a,8b,8p,8p,8p,2d4,8p,8g,8g,8g,8p,8p,8p,8p,8c4,8g,2g.,2p.,2p.,2p.,2p.,1g4"), 240)
+        music.rest(music.beat(BeatFraction.Breve))
+        music.playMelody(music.convertRTTTLToMelody("fries:d=4,o=5,b=120:2p,32d4,512p,34g4,256p,2b4,256d6,8p,16b4,8b.,9b4,64p,9b4,64p,32b.4,64p,9a,64p,16a,16b4,32b.,64p,32a.,64p,16g,32c.,64p,8e.,9c,64p,9c,64p,32c.,64p,9e.,64p,9g,64p,32g.,64p,16f#,16a4,8f#.,9a4,64p,8a4,32f#.,64p,9f#,64p,32e.,64p,32e.,64p,32e.,64p,32e.,64p,16d,16b4,8d.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,9b4,64p,8d6,32b.4,64p,8b.,9b4,64p,9b4,64p,32b.4,64p,9a,64p,16a,16b4,32b.,64p,32a.,64p,16g,32c.,64p,8e.,9c,64p,16c,16e,32c.,64p,32e.,64p,9e,64p,32e.,64p,32g.,64p,32g.,64p,16f#,32a.4,64p,8f#.,9a4,64p,16a4,32f#.,64p,32f#.,64p,32f#.,64p,32f#.,64p,32e.,64p,9e,64p,32e.,64p,16d,32b.4,64p,8d.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,9b4,64p,9g6,64p,16d6,16b4,32d.6,64p,16b,16b4,16b,16b4,16a,32b.4,64p,8a.,9b4,64p,9f#6,64p,16d#6,16b4,32d#.6,64p,16b,16b4,16b,16b4,16a,32b.4,64p,9a.,64p,32g.,64p,32g.,64p,9e6,64p,32g.,64p,9g,64p,32g.,64p,32g.,64p,32g.,64p,32a.,64p,16g,32b.4,64p,8g.,16b4,32g.,64p,32e.6,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,32g.,64p,9a,64p,16g,16b4,9g,64p,9b4,64p,32g.6,64p,16d6,32b.4,64p,9d6,64p,16b,16b4,32b.,64p,32b.,64p,16a,32b.4,64p,9a.,64p,16b4,32a.,64p,32f#.6,64p,32d#.6,64p,32d#.6,64p,32d#.6,64p,9d#6,64p,9b,64p,32b.,64p,16a,32b.4,64p,9a.,64p,9b4,64p,9e6,64p,32g.,64p,9g,64p,32g.,64p,9g,64p,32a.,64p,16g,32b.4,64p,8g.,16b4,32g.,64p,32e.6,64p,32g.,64p,32g.,64p,32g.,64p,9g,64p,9g,64p,32a.,64p,16g,32b.4,64p,8g.,9b4,64p,8d6,32b.4,64p,9b.,64p,9b4,64p,9b4,64p,32b.4,64p,9a,64p,32a.,64p,32b.4,64p,32b.,64p,9a,64p,16g,16c,8e,9c,64p,9c,64p,32c.,64p,9c.,64p,9g,64p,32g.,64p,16f#,32a.4,64p,8f#.,9a4,64p,9a4,64p,32a.4,64p,9a.4,64p,9e,64p,9e,64p,32d.,64p,8d.,9b4,64p,9b4,64p,32b.4,64p,9b4,64p,16d6,32b.4,64p,32b.,64p,8d6,32b.4,64p,8b.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,16b4,32b.,64p,9a,64p,32g.,64p,32c.,64p,9e,64p,9c,64p,9c,64p,32e.,64p,32c.,64p,9g,64p,9c,64p,9f#,64p,32a.4,64p,9a.4,64p,9a4,64p,9a4,64p,32a.4,64p,9f#,64p,32e.,64p,32e.,64p,32e.,64p,9e,64p,16d,16b4,16d,16p,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,9b4,64p,8d6,16b4,8b.,8b4,8d6,8b,8d6,8b,8d#6,32b.4,64p,8b.,9b4,64p,32a.,64p,16a,32b.4,64p,9a,64p,32a.,64p,9b,64p,32a.,64p,16g,32b.4,64p,8e.,9b4,64p,16b4,32a.,64p,32a.,64p,32a.,64p,9a,64p,9b,64p,16a,16g,16b4,8e.,16b4,16p,16b4,16b,16d6,16b,9d6,64p,32d.6,64p,32b.,64p,32d.6,64p,16b,16b4,9b.,64p,16b4,16p,16b4,16a,32b.,64p,32b.,64p,32b.,64p,32b.,64p,32b.,64p,32b.,64p,8a,16g,8f#.,9b4,64p,16b4,16a,16b4,16g,8a,8g,8b,16b4,8g.,9b4,64p,16b4,16a,16b4,16g,16a,16g,16a,16g,8b,32g.,64p,8g.,9b4,64p,9b4,64p,32b.4,64p,9b.4,64p,8b4,32d4,512p,34g4,307p,1b4"), 120)
         music.rest(music.beat(BeatFraction.Double))
     }
 })
