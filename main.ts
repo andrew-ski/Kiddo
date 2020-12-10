@@ -84,6 +84,11 @@ function rewardHUD () {
     }
 }
 sprites.onOverlap(SpriteKind.bear, SpriteKind.Player, function (sprite, otherSprite) {
+    if (sprite.x > otherSprite.x) {
+        otherSprite.x += -8
+    } else {
+        otherSprite.x += 8
+    }
     healthPercent += -14
     pause(1000)
 })
@@ -119,14 +124,9 @@ function squirrelPath () {
 }
 sprites.onOverlap(SpriteKind.Sword, SpriteKind.bear, function (sprite, otherSprite) {
     if (Kiddo.x < otherSprite.x) {
-        otherSprite.x += 8
+        otherSprite.x += 10
     } else {
-        otherSprite.x += -8
-    }
-    if (Kiddo.y < otherSprite.y) {
-        otherSprite.y += 8
-    } else {
-        otherSprite.y += -8
+        otherSprite.x += -10
     }
     if (BearHealth > 1) {
         BearHealth += -1
@@ -2497,7 +2497,7 @@ function spawnSquirrel () {
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.exit2)
     squirrelExitIs = 1
-    squirrelExit.setPosition(Kiddo.x + 78, Kiddo.y + 48)
+    squirrelExit.setPosition(Kiddo.x + 60, Kiddo.y + 40)
     if (squirrelExit.isHittingTile(CollisionDirection.Right)) {
         squirrelExit.x += -8
     }
@@ -3141,6 +3141,7 @@ function spawnKiddo () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.Sword)
+    Trekking_Pole.z = 4
     scene.cameraFollowSprite(Kiddo)
 }
 function squirrelAnimate () {
