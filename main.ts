@@ -2549,6 +2549,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     walk()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.PyBadge, function (sprite, otherSprite) {
+    game.splash("Merry Christmas", "Olivia (Kiddo)!")
     game.over(true, effects.clouds)
 })
 function drawHUDMeter2 (percent: number, hudSprite: Sprite, onColor: number, offColor: number) {
